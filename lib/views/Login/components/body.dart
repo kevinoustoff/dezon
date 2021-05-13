@@ -83,6 +83,14 @@ class _BodyState extends State<Body> {
                     print(response);
                     setState(() {
                       answ = response;
+                      progress.dismiss();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return SignUpScreen();
+                          },
+                        ));
                     });
                  }); 
                  
