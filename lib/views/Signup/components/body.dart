@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dezon/views/Login/login_screen.dart';
+import 'package:dezon/views/Profile/profile.dart';
 import 'package:dezon/views/Signup/components/background.dart';
 import 'package:dezon/views/Signup/components/or_divider.dart';
 import 'package:dezon/views/Signup/components/social_icon.dart';
@@ -58,7 +59,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return LoginScreen();
+                      return ProfilePage();
                     },
                   ),
                 );
