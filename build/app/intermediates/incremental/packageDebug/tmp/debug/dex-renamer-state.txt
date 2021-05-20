@@ -1,4 +1,4 @@
-#Tue May 18 23:22:05 GMT 2021
-base.0=/home/kevin/Documents/dezon/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-path.0=classes.dex
+#Thu May 20 10:25:13 GMT 2021
+base.0=/home/koda/dezon/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
+path.0=classes.dex
