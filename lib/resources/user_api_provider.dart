@@ -11,8 +11,8 @@ class UserApiProvider extends Api {
 
   Future<User> fetchUsersList() async {
     print("entered");
-    final response = await client
-        .get(Uri.parse("http://api.themoviedb.org/3/movie/popular?api_key=$_apiKey"));
+    final response = await client.get(Uri.parse(
+        "http://api.themoviedb.org/3/movie/popular?api_key=$_apiKey"));
     print(response.body.toString());
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
@@ -23,22 +23,20 @@ class UserApiProvider extends Api {
     }
   }
 
-  Future login(
+  Future login({
     @required String email,
-    @required String password,) async{
-
-    var uri =  Uri.parse(this.baseUrl+'login');
-    var response = await client.post(uri,headers:this.headers,
-    body: json.encode({
-          "email":email,
-          "password": password
-        }));
-    /* print(response); */  
+    @required String password,
+  }) async {
+    var uri = Uri.parse(this.baseUrl + 'login');
+    var response = await client.post(uri,
+        headers: this.headers,
+        body: json.encode({"email": email, "password": password}));
+    /* print(response); */
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
-      return response.body/* User.fromJson(json.decode(response.body)) */;
-    } else if(response.statusCode == 401){
-       return new User();
+      return response.body /* User.fromJson(json.decode(response.body)) */;
+    } else if (response.statusCode == 401) {
+      return new User();
     } else {
       // If that call was not successful, throw an error.
       throw Exception(response.statusCode);

@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'userProfile.dart';
-
 class Freelancers extends StatefulWidget {
   @override
   _FreelancersState createState() => _FreelancersState();
@@ -35,11 +33,7 @@ class _FreelancersState extends State<Freelancers> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserProfile(),
-                        )),
+                    onTap: () {},
                     child: Card(
                       child: ListTile(
                         leading: Container(
