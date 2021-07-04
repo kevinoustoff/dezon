@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'views/loginScreen.dart';
 import 'views/registerScreen.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -57,13 +58,13 @@ class _MyAppState extends State<MyApp> {
                   }
                   return SafeArea(
                     child: Scaffold(
+                      backgroundColor: Colors.black,
                       body: Center(
                         child: Container(
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(Radius.circular(10))),
                           child: Stack(
                             alignment: Alignment.center,
                             children: <Widget>[
