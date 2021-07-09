@@ -10,53 +10,6 @@ import '../constants.dart';
 import 'homePage.dart';
 import 'loginScreen.dart';
 
-bool _containNumeric(String s) {
-  for (int i = 0; i < s.length; i++) {
-    if (double.tryParse(s[i]) != null) {
-      return true;
-    }
-  }
-  return false;
-}
-
-String validateNom(String s) {
-  if (s == null || s.isEmpty) {
-    return "N'oubliez pas votre nom!";
-  }
-  if (_containNumeric(s)) {
-    return 'Nom Invalide!';
-  }
-  /* if (s.contains(" ")) {
-    return "Entrez un nom sans espace";
-  } */
-  return null;
-}
-
-String validatePassword(String s) {
-  if (s == null || s.isEmpty) {
-    return "Entrer un mot de passe!";
-  }
-  if (s.length < 8) {
-    return "Au moins 8 caractères requis";
-  }
-  return null;
-}
-
-String validateEmail(String s) {
-  if (s != null && s.isNotEmpty) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(s)) {
-      return "Veuillez entrer un email valide!";
-    }
-  }
-  if (s == null || s.isEmpty) {
-    return "N'oubliez pas votre email!";
-  }
-  return null;
-}
-
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -129,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         hintText: "Identifiant",
-                        prefixIcon: Icon(Icons.security_rounded),
+                        prefixIcon: Icon(Icons.dashboard_outlined),
                       ),
                       validator: (value) => null,
                       onSaved: (newValue) {
@@ -196,7 +149,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               TextSpan(
                                 text: "Termes et Conditions >",
                                 style: TextStyle(
-                                    decoration: TextDecoration.underline),
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -208,7 +164,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color(0xFF))),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(kPrimaryColor)),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
@@ -360,27 +318,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     SizedBox(height: 5),
                     Divider(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: "Vous avez déjà un compte?",
-                          style: TextStyle(fontSize: 16, color: Colors.black87),
-                          children: const <TextSpan>[
-                            TextSpan(
-                              text: " Se connecter ici",
-                              style: TextStyle(color: kPrimaryColor),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
                             ),
-                          ],
+                          );
+                        },
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: "Vous avez déjà un compte?",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black87),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: " Se connecter ici",
+                                style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                     SizedBox(height: 60),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dezon/components/dataConnectionChecker.dart';
+import 'package:dezon/views/forgotPasswordScreen.dart';
 import 'package:dezon/views/registerScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -9,31 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import 'homePage.dart';
-
-String validatePassword(String s) {
-  if (s == null || s.isEmpty) {
-    return "Entrer un mot de passe!";
-  }
-  if (s.length < 8) {
-    return "Au moins 8 caractères requis";
-  }
-  return null;
-}
-
-String validateEmail(String s) {
-  if (s != null && s.isNotEmpty) {
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(s)) {
-      return "Veuillez entrer un email valide!";
-    }
-  }
-  if (s == null || s.isEmpty) {
-    return "N'oubliez pas votre email!";
-  }
-  return null;
-}
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -44,7 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String email;
   String password;
-
   bool showSpinner = false;
   bool showPassword = false;
 
@@ -118,7 +93,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GestureDetector(child: Text("Mot de passe oublié >")),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPassword(),
+                            ),
+                          ),
+                          child: Text("Mot de passe oublié >"),
+                        ),
                       ],
                     ),
                     SizedBox(height: 40),
@@ -126,7 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            //style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color(0xFF))),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(kPrimaryColor)),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
@@ -134,8 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     .hasConnection) {
                                   setState(() => showSpinner = true);
                                   try {
-                                    var uri = Uri.parse(host +
-                                        "/index.php/wp-json/api/login");
+                                    var uri = Uri.parse(host + ApiRoutes.login);
                                     var resp = await http.post(
                                       uri,
                                       body: {
@@ -262,27 +246,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 50),
                     Divider(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: "Vous n'avez pas de compte?",
-                          style: TextStyle(fontSize: 16, color: Colors.black87),
-                          children: const <TextSpan>[
-                            TextSpan(
-                              text: " Inscrivez-vous ici",
-                              style: TextStyle(color: kPrimaryColor),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterScreen(),
                             ),
-                          ],
+                          );
+                        },
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            text: "Vous n'avez pas de compte?",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black87),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: " Inscrivez-vous ici",
+                                style: TextStyle(
+                                    color: kPrimaryColor, fontSize: 18),
+                              ),
+                            ],
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],

@@ -23,7 +23,7 @@ class AuthState extends ChangeNotifier {
     @required String password,
   }) async {
     var user;
-    String errorMessage;
+    //String errorMessage;
     try {
       //print('Response status: ${response.statusCode}');
       //print('Response body: ${response.body}');

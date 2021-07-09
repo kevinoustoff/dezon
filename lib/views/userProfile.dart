@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
+import 'editProfile.dart';
 
 List userDetails = [
   ["Taux horaire", ''],
@@ -26,6 +27,19 @@ class _UserProfileState extends State<UserProfile> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Profil'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              /* Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProfile(),
+                ),
+              ); */
+            },
+            icon: Icon(Icons.edit_rounded),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: http.get(
@@ -77,7 +91,7 @@ class _UserProfileState extends State<UserProfile> {
                                                 BorderRadius.circular(50.0),
                                             image: DecorationImage(
                                                 image: AssetImage(
-                                                    'assets/images/chris.jpg'),
+                                                    'assets/images/defaultProfile.jpg'),
                                                 fit: BoxFit.cover),
                                           ),
                                         ),

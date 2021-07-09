@@ -2,6 +2,7 @@ import 'package:dezon/constants.dart';
 import 'package:dezon/views/userProfile.dart';
 import 'package:dezon/views/loginScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,8 +11,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
+  bool showSpinner = false;
   final padding = EdgeInsets.symmetric(horizontal: 20);
+  final List<String> menuLabels = [
+    'Accueil',
+    'Services',
+    'Projets',
+    'Messagerie',
+  ];
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -40,9 +49,10 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               CircleAvatar(
-                  radius: 30,
-                  backgroundImage:
-                      NetworkImage(url ?? "https://via.placeholder.com/150")),
+                radius: 30,
+                backgroundImage: AssetImage(AppAssets.defaultProfile),
+                //NetworkImage(url ?? "https://via.placeholder.com/150"),
+              ),
               SizedBox(width: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,40 +92,43 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-        title: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              Colors.black26,
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-            ),
-            padding: MaterialStateProperty.all(
-              EdgeInsets.fromLTRB(30, 5, 0, 5),
-            ),
-          ),
-          onPressed: () {},
-          child: Row(
-            //mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.search),
-              SizedBox(width: 10),
-              Text(
-                "Je cherche..",
-                style: TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-        ),
+        title: _selectedIndex == 0
+            ? ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    Colors.black26,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.fromLTRB(30, 5, 0, 5),
+                  ),
+                ),
+                onPressed: () {},
+                child: Row(
+                  //mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.search),
+                    SizedBox(width: 10),
+                    Text(
+                      "Je cherche..",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              )
+            : Text(menuLabels[_selectedIndex]),
       ),
       drawer: Drawer(
         child: SafeArea(
           child: Container(
-            color: Colors.black12,
+            color: Colors.white,
             child: Column(
               children: [
                 FutureBuilder(
@@ -149,10 +162,12 @@ class _HomePageState extends State<HomePage> {
                               buildMenuItem(
                                 text: 'Mon profil',
                                 icon: Icons.verified_user,
-                                onClicked: () {
-                                   
-
-                                },
+                                onClicked: () {},
+                              ),
+                              buildMenuItem(
+                                text: 'Paramètres',
+                                icon: Icons.settings,
+                                onClicked: () {},
                               ),
                             ],
                           ),
@@ -161,52 +176,75 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Déconnexion"),
+                Divider(thickness: 2),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: GestureDetector(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.logout_rounded,
+                          color: Colors.red,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          "Déconnexion",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    onTap: () async {
+                      setState(() => showSpinner = true);
+                      try {
+                        _scaffoldKey.currentState.openEndDrawer();
+                        bool dataCleared =
+                            await (await SharedPreferences.getInstance())
+                                .clear();
+                        if (dataCleared) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "La déconnexion a échouée. Veuillez fermer l'application et réessayer.",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                      setState(() => showSpinner = false);
+                    },
                   ),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LoginScreen(),
-                                        ),
-                                      );
-                  },
                 ),
               ],
             ),
           ),
         ),
       ),
-      body: [
-        Center(
-          child: Text(
-            'Accueil',
-            style: optionStyle.copyWith(color: kPrimaryColor.withOpacity(0.8)),
+      body: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        color: Colors.brown,
+        dismissible: true,
+        progressIndicator: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+        ),
+        child: Builder(
+          builder: (context) => Center(
+            child: Text(
+              menuLabels[_selectedIndex],
+              style: optionStyle,
+            ),
           ),
         ),
-        Center(
-          child: Text(
-            'Emplois',
-            style: optionStyle,
-          ),
-        ),
-        Center(
-          child: Text(
-            'Freelancers',
-            style: optionStyle,
-          ),
-        ),
-        //Freelancers(),
-        Center(
-          child: Text(
-            'Entreprises',
-            style: optionStyle,
-          ),
-        ),
-      ][_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 6,
@@ -220,16 +258,16 @@ class _HomePageState extends State<HomePage> {
             label: 'Accueil',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books_outlined),
-            label: 'Emplois',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people_outline_rounded),
-            label: 'Freelancer',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.work_outline),
-            label: 'Entreprise',
+            label: 'Services',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books_outlined),
+            label: 'Projets',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat_bubble_outline_rounded),
+            label: 'Messagerie',
           ),
         ],
       ),
