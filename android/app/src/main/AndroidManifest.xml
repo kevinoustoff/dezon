@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dezon">
    <application
-        android:label="dezon"
+        android:label="Dezon"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         

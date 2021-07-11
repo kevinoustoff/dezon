@@ -93,6 +93,9 @@ String validatePassword(String s) {
   return null;
 }
 
+fullHeight(BuildContext context) => MediaQuery.of(context).size.height;
+fullWidth(BuildContext context) => MediaQuery.of(context).size.width;
+
 class ApiRoutes {
   static const forgotPassword = "";
   static const login = "/index.php/wp-json/api/login";
@@ -100,4 +103,12 @@ class ApiRoutes {
 
 class AppAssets {
   static const defaultProfile = "assets/images/defaultProfile.jpg";
+  static const category1 = "assets/images/category1.jpeg";
+  static const category2 = "assets/images/category2.jpeg";
+  static const category3 = "assets/images/category3.jpeg";
+  static const category4 = "assets/images/category4.jpeg";
+  static const worker1 = "assets/images/worker1.jpg";
+  static const worker2 = "assets/images/worker2.jpg";
+  static const worker3 = "assets/images/worker3.jpg";
+  static const worker4 = "assets/images/worker4.jpg";
 }

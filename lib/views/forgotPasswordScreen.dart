@@ -86,6 +86,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       .startsWith('20')) {
                                     Map respBody = Map.from(
                                         jsonDecode(resp.body))["body_response"];
+                                    if (respBody != null) {}
                                   } else if (resp.statusCode
                                       .toString()
                                       .startsWith('401')) {

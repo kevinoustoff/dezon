@@ -7,10 +7,9 @@ import '../constants.dart';
 import 'editProfile.dart';
 
 List userDetails = [
-  ["Taux horaire", ''],
-  ["Emplacement", 'Angleterre'],
-  ["Avis", '0/5 (0 Avis)'],
-  ["Membre depuis", '12 Mai 2021'],
+  "Emplacement",
+  "Avis",
+  "Membre depuis",
 ];
 
 class UserProfile extends StatefulWidget {
@@ -28,16 +27,31 @@ class _UserProfileState extends State<UserProfile> {
         centerTitle: true,
         title: Text('Profil'),
         actions: [
-          IconButton(
-            onPressed: () {
-              /* Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditProfile(),
-                ),
-              ); */
-            },
+          PopupMenuButton(
             icon: Icon(Icons.edit_rounded),
+            onSelected: (value) {
+              switch (value) {
+                case 1:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfile(),
+                    ),
+                  );
+                  break;
+                default:
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text("Modifier Informations"),
+                value: 1,
+              ),
+              PopupMenuItem(
+                child: Text("Modifier Mot de passe"),
+                value: 2,
+              )
+            ],
           ),
         ],
       ),
@@ -83,29 +97,29 @@ class _UserProfileState extends State<UserProfile> {
                                   child: Column(
                                     children: [
                                       ListTile(
-                                        leading: Container(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/images/defaultProfile.jpg'),
-                                                fit: BoxFit.cover),
-                                          ),
+                                        leading: CircleAvatar(
+                                          radius: 30,
+                                          backgroundColor: Colors.grey,
+                                          backgroundImage: (respBody[
+                                                      'freelance-photo-profile'] !=
+                                                  null)
+                                              ? NetworkImage(respBody[
+                                                  'freelance-photo-profile'])
+                                              : AssetImage(
+                                                  AppAssets.defaultProfile),
                                         ),
-                                        title: Row(
-                                          mainAxisSize: MainAxisSize.min,
+                                        title: Text(
+                                          Map.from(Map.from(
+                                                      respBody['user_info'])[
+                                                  'data'])['display_name'] +
+                                              "nipeunphieihqeppbyb",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Row(
                                           children: [
                                             Icon(
                                               Icons.check_circle,
                                               color: Colors.green,
-                                            ),
-                                            Text(
-                                              Map.from(Map.from(
-                                                      respBody['user_info'])[
-                                                  'data'])['display_name'],
                                             ),
                                           ],
                                         ),
@@ -126,13 +140,22 @@ class _UserProfileState extends State<UserProfile> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  userDetails[i][0],
+                                                  userDetails[i],
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontSize: 16),
                                                 ),
-                                                Text(userDetails[i][1]),
+                                                Text(
+                                                  [
+                                                    "",
+                                                    "",
+                                                    Map.from(Map.from(respBody[
+                                                                'user_info'])[
+                                                            'data'])[
+                                                        'user_registered'],
+                                                  ][i],
+                                                ),
                                               ],
                                             ),
                                           ),
