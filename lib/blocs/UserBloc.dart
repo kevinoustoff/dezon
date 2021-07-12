@@ -1,4 +1,4 @@
-import 'package:rxdart/rxdart.dart';
+/* import 'package:rxdart/rxdart.dart';
 
 import '../models/User.dart';
 import '../resources/user_repository.dart';
@@ -19,4 +19,4 @@ class UserBloc {
   }
 }
 
-final bloc = UserBloc();
+final bloc = UserBloc(); */
