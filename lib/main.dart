@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dezon/views/homePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +41,6 @@ class _MyAppState extends State<MyApp> {
             fontFamily: "Poppins"),
         initialRoute: '/',
         routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
           '/': (context) => FutureBuilder(
                 future: SharedPreferences.getInstance(),
                 builder: (context, snapshot) {
@@ -58,35 +55,11 @@ class _MyAppState extends State<MyApp> {
                   return SafeArea(
                     child: Scaffold(
                       backgroundColor: Colors.black,
-                      body: Center(
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Platform.isIOS
-                                  ? CupertinoActivityIndicator(
-                                      radius: 25,
-                                    )
-                                  : SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                kPrimaryColor),
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 45,
-                                width: 45,
-                              ),
-                            ],
-                          ),
+                      body: Container(
+                        height: fullHeight(context),
+                        width: fullWidth(context),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
                         ),
                       ),
                     ),

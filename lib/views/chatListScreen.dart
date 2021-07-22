@@ -1,6 +1,9 @@
 import 'package:dezon/constants.dart';
 import 'package:flutter/material.dart';
 
+import 'drawer.dart';
+import 'homePage.dart';
+
 class ChatListScreen extends StatefulWidget {
   @override
   _ChatListScreenState createState() => _ChatListScreenState();
@@ -17,6 +20,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(menuLabels[3]),
+      ),
+      drawer: CustomDrawer(),
       body: ((chatUserList == null) || chatUserList.isEmpty)
           ? Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
@@ -58,6 +66,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 for (var i = 0; i < chatUserList.length; i += 2)
                   ListTile(
                     leading: CircleAvatar(
+                      backgroundColor: Colors.grey,
                       backgroundImage: AssetImage(AppAssets.defaultProfile),
                     ),
                     title: Text(chatUserList[i]),

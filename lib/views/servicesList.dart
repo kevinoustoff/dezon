@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants.dart';
+import 'drawer.dart';
+import 'homePage.dart';
 
 class ServicesList extends StatefulWidget {
   @override
@@ -14,47 +16,24 @@ class _ServicesListState extends State<ServicesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(menuLabels[1]),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.sort)),
+        ],
+      ),
+      drawer: CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.add, color: kPrimaryColor),
-                      Text(
-                        'Publier un service',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(width: 10),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.filter_alt_outlined, color: kPrimaryColor),
-                      Text(
-                        'Filtrer',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Divider(),
             Expanded(
               child: FutureBuilder(
                 future: http.get(
                   Uri.parse(
-                    host + "/index.php/wp-json/api/services/last",
+                    ApiRoutes.host + "/index.php/wp-json/api/services/last",
                   ),
                 ),
                 builder: (context, snapshot) {

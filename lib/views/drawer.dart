@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
-import 'homePage.dart';
 import 'loginScreen.dart';
 import 'userProfile.dart';
 
@@ -15,7 +14,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final padding = EdgeInsets.symmetric(horizontal: 20);
   ValueNotifier<int> userId = ValueNotifier(-888);
 
-  Widget buildHeader({String url, String nom, String identifiant, int id}) =>
+  Widget buildHeader({
+    String url,
+    String nom,
+    String identifiant,
+    int id,
+    String photo,
+  }) =>
       GestureDetector(
         onTap: () {
           if (![null, -888].contains(id)) {
@@ -32,8 +37,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
         child: ListTile(
           leading: CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage(AppAssets.defaultProfile),
-            //NetworkImage(url ?? "https://via.placeholder.com/150"),
+            backgroundColor: Colors.grey,
+            backgroundImage: (![null, ""].contains(photo))
+                ? NetworkImage(photo)
+                : AssetImage(AppAssets.defaultProfile),
           ),
           title: Text(
             nom ?? "..",
@@ -52,11 +59,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
     @required String text,
     @required IconData icon,
     @required Function onClicked,
+    bool division = false,
   }) {
     final color = Colors.black;
     final hoverColor = Colors.white70;
 
     return ListTile(
+      isThreeLine: false,
+      dense: division,
+      contentPadding: EdgeInsets.all(0),
       leading: Icon(icon, color: color),
       title: Text(text, style: TextStyle(color: color)),
       hoverColor: hoverColor,
@@ -82,6 +93,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       id: snapshot.data.getInt('ID'),
                       identifiant: "Mon profil",
                       nom: snapshot.data.getString('user_nicename'),
+                      photo: snapshot.data.getString('freelance-photo-profile'),
                     );
                   }
                   return buildHeader();
@@ -91,6 +103,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
                         padding: padding,
@@ -116,6 +129,41 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               text: 'Portefeuille',
                               icon: Icons.credit_card,
                               onClicked: () {},
+                            ),
+                            ExpansionTile(
+                              leading: Icon(
+                                Icons.library_books,
+                                color: Colors.black,
+                              ),
+                              tilePadding: EdgeInsets.all(0),
+                              title: Text(
+                                'Mes Projets',
+                                style: TextStyle(
+                                  //fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Column(
+                                    children: [
+                                      buildMenuItem(
+                                        text: 'Afficher',
+                                        icon: Icons.visibility,
+                                        onClicked: () {},
+                                        division: true,
+                                      ),
+                                      buildMenuItem(
+                                        text: 'Publier',
+                                        icon: Icons.add,
+                                        onClicked: () {},
+                                        division: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             buildMenuItem(
                               text: 'Enregistrés',
@@ -155,7 +203,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   onTap: () async {
                     //setState(() => showSpinner = true);
                     try {
-                      homePageScaffoldKey.currentState.openEndDrawer();
+                      Navigator.of(context).pop();
                       bool dataCleared =
                           await (await SharedPreferences.getInstance()).clear();
                       if (dataCleared) {

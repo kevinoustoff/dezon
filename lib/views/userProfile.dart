@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dezon/views/modifyPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +8,7 @@ import '../constants.dart';
 import 'editProfile.dart';
 
 List userDetails = [
-  "Emplacement",
+  'Qualités',
   "Avis",
   "Membre depuis",
 ];
@@ -20,6 +21,8 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  ValueNotifier<Map> infos;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +38,15 @@ class _UserProfileState extends State<UserProfile> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EditProfile(),
+                      builder: (context) => EditProfile(infos: infos.value),
+                    ),
+                  );
+                  break;
+                case 2:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ModifyPassword(),
                     ),
                   );
                   break;
@@ -43,10 +54,11 @@ class _UserProfileState extends State<UserProfile> {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text("Modifier Informations"),
-                value: 1,
-              ),
+              if (infos != null)
+                PopupMenuItem(
+                  child: Text("Modifier Informations"),
+                  value: 1,
+                ),
               PopupMenuItem(
                 child: Text("Modifier Mot de passe"),
                 value: 2,
@@ -57,9 +69,8 @@ class _UserProfileState extends State<UserProfile> {
       ),
       body: FutureBuilder(
         future: http.get(
-          Uri.parse(host +
-              "/index.php/wp-json/api/profile?uid=" +
-              widget.id.toString()),
+          Uri.parse(
+              ApiRoutes.host + ApiRoutes.showProfile + widget.id.toString()),
         ),
         builder: (context, snapshot) {
           if ((snapshot.connectionState == ConnectionState.done) &&
@@ -69,13 +80,34 @@ class _UserProfileState extends State<UserProfile> {
               print("${response.body}");
               Map respBody =
                   Map.from(jsonDecode(response.body))["body_response"];
+              infos = ValueNotifier(
+                {
+                  'freelance-photo-profile':
+                      respBody['freelance-photo-profile'],
+                  'user-login': Map.from(
+                      Map.from(respBody['user_info'])['data'])['user_login'],
+                  'user-nicename': Map.from(
+                      Map.from(respBody['user_info'])['data'])['user_nicename'],
+                  'display-name': Map.from(
+                      Map.from(respBody['user_info'])['data'])['display_name'],
+                  'user-email': Map.from(
+                      Map.from(respBody['user_info'])['data'])['user_email'],
+                  'user-url': Map.from(
+                      Map.from(respBody['user_info'])['data'])['user_url'],
+                  'sexe': respBody['sexe'],
+                  'freelancer-language': respBody['freelancer-language'],
+                  'freelancer-locations': respBody['freelancer-locations'],
+                  'freelance-type': respBody['freelance-type'],
+                  'contact': respBody['contact'],
+                },
+              );
               return SingleChildScrollView(
                 child: Column(
                   children: [
                     Stack(
                       children: <Widget>[
                         Container(
-                          height: 330.0,
+                          height: 280.0,
                           width: double.infinity,
                         ),
                         Container(
@@ -109,10 +141,9 @@ class _UserProfileState extends State<UserProfile> {
                                                   AppAssets.defaultProfile),
                                         ),
                                         title: Text(
-                                          Map.from(Map.from(
-                                                      respBody['user_info'])[
-                                                  'data'])['display_name'] +
-                                              "nipeunphieihqeppbyb",
+                                          Map.from(
+                                              Map.from(respBody['user_info'])[
+                                                  'data'])['display_name'],
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         subtitle: Row(
@@ -304,60 +335,59 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: Column(
+                    Builder(builder: (context) {
+                      if ((respBody["freelancer-skills"] == null) ||
+                          (respBody["freelancer-skills"].length == 0)) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 15),
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Conception Graphique",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 17),
+                          for (var i = 0;
+                              i < respBody["freelancer-skills"].length;
+                              i++)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 15),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        Map.from(respBody["freelancer-skills"]
+                                            [i])['skill'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17),
+                                      ),
+                                      Text(
+                                        Map.from(respBody["freelancer-skills"]
+                                            [i])['percent'],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                  LinearProgressIndicator(
+                                    backgroundColor: Colors.black12,
+                                    value: double.parse(Map.from(
+                                            respBody["freelancer-skills"]
+                                                [i])['percent']) /
+                                        100,
+                                    minHeight: 5,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Color(0xFFfecc4e)),
+                                  )
+                                ],
                               ),
-                              Text("60%"),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            backgroundColor: Colors.black12,
-                            value: 0.6,
-                            minHeight: 5,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFFfecc4e)),
-                          )
+                            ),
                         ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 15),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Editeur de video",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 17),
-                              ),
-                              Text("90%"),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            backgroundColor: Colors.black12,
-                            value: 0.9,
-                            minHeight: 5,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFFfecc4e)),
-                          )
-                        ],
-                      ),
-                    ),
+                      );
+                    }),
                     SizedBox(height: 15),
                     Row(
                       children: [
@@ -383,9 +413,7 @@ class _UserProfileState extends State<UserProfile> {
                                 shape: BoxShape.circle,
                                 color: Colors.black12,
                               ),
-                              child: Icon(
-                                Icons.person,
-                              ),
+                              child: Icon(Icons.female_outlined),
                             ),
                             title: Text('Sexe'),
                             subtitle: Text(respBody["sexe"]),
@@ -399,11 +427,11 @@ class _UserProfileState extends State<UserProfile> {
                                 color: Colors.black12,
                               ),
                               child: Icon(
-                                Icons.person,
+                                Icons.fact_check_outlined,
                               ),
                             ),
                             title: Text('Type de prestation'),
-                            subtitle: Text("Particulier"),
+                            subtitle: Text(respBody["freelance-type"]),
                           ),
                           Divider(height: 1),
                           ListTile(
@@ -413,12 +441,10 @@ class _UserProfileState extends State<UserProfile> {
                                 shape: BoxShape.circle,
                                 color: Colors.black12,
                               ),
-                              child: Icon(
-                                Icons.fact_check_outlined,
-                              ),
+                              child: Icon(Icons.location_on),
                             ),
                             title: Text('Localisation'),
-                            subtitle: Text("Lomé"),
+                            subtitle: Text(respBody["freelancer-locations"]),
                           ),
                           Divider(height: 1),
                           ListTile(

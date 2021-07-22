@@ -44,8 +44,6 @@ TextStyle salaryStyle = new TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 12);
 
-const String host = "https://dezon.app";
-
 String validateEmail(String s) {
   if (s != null && s.isNotEmpty) {
     Pattern pattern =
@@ -93,15 +91,31 @@ String validatePassword(String s) {
   return null;
 }
 
+const String noConnectionText =
+    "Connexion internet faible ou inexistante. Assurez vous d'avoir une bonne liaison internet et réessayez !";
 fullHeight(BuildContext context) => MediaQuery.of(context).size.height;
 fullWidth(BuildContext context) => MediaQuery.of(context).size.width;
 
 class ApiRoutes {
+  static const String host = "https://dezon.app/";
+  static const String termsAndConditions = "index.php/terms-and-conditions/";
   static const forgotPassword = "";
-  static const login = "/index.php/wp-json/api/login";
+  static const modifyPass = "";
+  static const login = "index.php/wp-json/api/login";
+  static const register = "index.php/wp-json/api/register";
+  static const showProfile = "index.php/wp-json/api/profile?uid=";
+  static const sectionLanguesPrestataires =
+      "/index.php/wp-json/api/langues-prestataires";
+  static const sectionSexes = "index.php/wp-json/api/sexes";
+  static const sectionEnglishLevels = "index.php/wp-json/api/english-levels";
+  static const sectionLocations = "index.php/wp-json/api/locations";
+  static const sectionTypesPrestataires =
+      "index.php/wp-json/api/types-prestataires";
 }
 
 class AppAssets {
+  static const logo = "assets/images/logo.png";
+  static const appIcon = "assets/images/appicon.png";
   static const defaultProfile = "assets/images/defaultProfile.jpg";
   static const category1 = "assets/images/category1.jpeg";
   static const category2 = "assets/images/category2.jpeg";

@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:dezon/constants.dart';
 import 'package:dezon/views/chatListScreen.dart';
 import 'package:dezon/views/drawer.dart';
@@ -8,7 +9,12 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-GlobalKey<ScaffoldState> homePageScaffoldKey = new GlobalKey<ScaffoldState>();
+final List<String> menuLabels = [
+  'Dezon',
+  'Services',
+  'Projets',
+  'Messagerie',
+];
 
 final TextStyle optionStyle =
     TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -22,13 +28,6 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   bool showSpinner = false;
 
-  final List<String> menuLabels = [
-    'Dezon',
-    'Services',
-    'Projets',
-    'Messagerie',
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -37,56 +36,100 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: homePageScaffoldKey,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(menuLabels[_selectedIndex]),
-      ),
-      drawer: CustomDrawer(),
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        color: Colors.brown,
-        dismissible: true,
-        progressIndicator: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+    return SafeArea(
+      child: Scaffold(
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          color: Colors.brown,
+          dismissible: true,
+          progressIndicator: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+          ),
+          child: Builder(
+            builder: (context) {
+              return [
+                HomeContent(),
+                ServicesList(),
+                ProjectsList(),
+                ChatListScreen(),
+              ][_selectedIndex];
+            },
+          ),
         ),
-        child: Builder(
-          builder: (context) {
-            return [
-              HomeContent(),
-              ServicesList(),
-              ProjectsList(),
-              ChatListScreen(),
-            ][_selectedIndex];
-          },
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          elevation: 6,
+          currentIndex: _selectedIndex,
+          selectedItemColor: kPrimaryColor,
+          onTap: _onItemTapped,
+          unselectedItemColor: Colors.black54,
+          selectedFontSize: 4,
+          unselectedFontSize: 4,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              activeIcon: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Text(
+                  'Accueil',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.work_outline),
+              activeIcon: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Text(
+                  'Services',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.library_books_outlined),
+              activeIcon: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Text(
+                  'Projets',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline_rounded),
+              activeIcon: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Text(
+                  'Messagerie',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              label: '',
+            ),
+          ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 6,
-        currentIndex: _selectedIndex,
-        selectedItemColor: kPrimaryColor,
-        onTap: _onItemTapped,
-        unselectedItemColor: Colors.black54,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.work_outline),
-            label: 'Services',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books_outlined),
-            label: 'Projets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline_rounded),
-            label: 'Messagerie',
-          ),
-        ],
       ),
     );
   }
@@ -98,11 +141,11 @@ class HomeContent extends StatefulWidget {
 }
 
 class _HomeContentState extends State<HomeContent> {
-  List topCategories = [
-    'Graphisme',
-    'Entretien',
-    'Évenementiel',
-    'Comptabilité',
+  final List images = [
+    AppAssets.category1,
+    AppAssets.category2,
+    AppAssets.category3,
+    AppAssets.category4,
   ];
   List topWorkers = [
     AppAssets.worker1,
@@ -126,11 +169,29 @@ class _HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        /*  title: Image.asset(
+          AppAssets.logo,
+          //fit: BoxFit.contain,
+          width: 130,
+          color: kPrimaryColor,
+          colorBlendMode: BlendMode.screen,
+        ), */
+        title: Image.asset(
+          AppAssets.appIcon,
+          width: 40,
+        ),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+        ],
+      ),
+      drawer: CustomDrawer(),
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(12, 12, 5, 20),
         child: Column(
           children: [
-            ElevatedButton(
+            /* ElevatedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                   Colors.white,
@@ -138,9 +199,6 @@ class _HomeContentState extends State<HomeContent> {
                 elevation: MaterialStateProperty.all(3),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
-                    /* side: BorderSide(
-                              color: Colors.grey,
-                            ), */
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                 ),
@@ -159,8 +217,36 @@ class _HomeContentState extends State<HomeContent> {
                   ),
                 ],
               ),
+            ), */
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Text(
+                  "Nouveautés",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 10),
+            Container(
+              height: 170,
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  return Image.asset(
+                    images[index],
+                    fit: BoxFit.fill,
+                  );
+                },
+                autoplay: true,
+                itemCount: images.length,
+                pagination: SwiperPagination(builder: SwiperPagination.dots),
+                control: SwiperControl(color: Colors.brown, size: 40),
+              ),
+            ),
+            SizedBox(height: 25),
             Column(
               children: [
                 Row(
@@ -183,7 +269,7 @@ class _HomeContentState extends State<HomeContent> {
                 FutureBuilder(
                   future: http.get(
                     Uri.parse(
-                      host + "/index.php/wp-json/api/services/last",
+                      ApiRoutes.host + "/index.php/wp-json/api/services/last",
                     ),
                   ),
                   builder: (context, snapshot) {
@@ -385,7 +471,7 @@ class _HomeContentState extends State<HomeContent> {
                           //height: fullHeight(context) * 0.3,
                           width: fullWidth(context) * 0.45,
                           child: Card(
-                            elevation: 4,
+                            elevation: 1,
                             child: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Column(
