@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dezon/components/dataConnectionChecker.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import 'package:http/http.dart' as http;
@@ -92,48 +93,67 @@ class _ModifyPasswordState extends State<ModifyPassword> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
+                              setState(() => showSpinner = true);
                               if (await DataConnectionChecker().hasConnection) {
-                                setState(() => showSpinner = true);
                                 try {
-                                  var uri = Uri.parse(
-                                      ApiRoutes.host + ApiRoutes.modifyPass);
-                                  var resp = await http.post(
-                                    uri,
-                                    body: {
-                                      'password': password,
-                                      'new_password': newPassword,
-                                    },
-                                  );
-                                  print(
-                                      "Response Status code: ${resp.statusCode}");
-                                  print("Response body: ${resp.body}");
-                                  if (resp.statusCode
-                                      .toString()
-                                      .startsWith('20')) {
-                                    _formKey.currentState.reset();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: Colors.green,
-                                        content: Text("Modification réussie"),
-                                      ),
+                                  int userId =
+                                      (await SharedPreferences.getInstance())
+                                          .getInt('ID');
+                                  if (userId != null) {
+                                    var uri = Uri.parse(
+                                        ApiRoutes.host + ApiRoutes.modifyPass);
+                                    var resp = await http.post(
+                                      uri,
+                                      body: {
+                                        "user_id": userId.toString(),
+                                        "old_password": password,
+                                        "new_password": newPassword,
+                                        "confirm_password": newPassword,
+                                      },
                                     );
-                                  } else if (resp.statusCode
-                                      .toString()
-                                      .startsWith('401')) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          Map.from(
-                                              jsonDecode(resp.body))['message'],
-                                          textAlign: TextAlign.center,
+                                    print(
+                                        "Response Status code: ${resp.statusCode}");
+                                    print("Response body: ${resp.body}");
+                                    if (resp.statusCode
+                                        .toString()
+                                        .startsWith('20')) {
+                                      _formKey.currentState.reset();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: Colors.green,
+                                          content: Text("Modification réussie"),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else if (resp.statusCode
+                                        .toString()
+                                        .startsWith('401')) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            Map.from(jsonDecode(resp.body))[
+                                                'message'],
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Erreur survenue sur le serveur !",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          "Erreur survenue sur le serveur !",
+                                          "L'application a rencontré une erreur. Veuillez réessayer plus tard !",
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -142,7 +162,6 @@ class _ModifyPasswordState extends State<ModifyPassword> {
                                 } catch (e) {
                                   print("Error: $e");
                                 }
-                                setState(() => showSpinner = false);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -153,6 +172,7 @@ class _ModifyPasswordState extends State<ModifyPassword> {
                                   ),
                                 );
                               }
+                              setState(() => showSpinner = false);
                             }
                           },
                           child: Text(

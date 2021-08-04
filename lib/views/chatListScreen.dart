@@ -1,6 +1,7 @@
 import 'package:dezon/constants.dart';
 import 'package:flutter/material.dart';
 
+import 'chatScreen.dart';
 import 'drawer.dart';
 import 'homePage.dart';
 
@@ -11,10 +12,18 @@ class ChatListScreen extends StatefulWidget {
 
 class _ChatListScreenState extends State<ChatListScreen> {
   List chatUserList = [
-    for (var i = 0; i < 20; i++) ...[
-      "Utilisateur$i",
-      "Message entrant de l'utilisateur $i",
-    ]
+    AppAssets.category1,
+    'Jason',
+    'Le lien du diagramme se trouve dans le dossier prédent',
+    AppAssets.category2,
+    'FlashDrop',
+    'Est ce possible de changer la couleur du haut ?',
+    AppAssets.category3,
+    'Essen Mike',
+    'Fixons le délai à 4 jours',
+    AppAssets.category4,
+    'Bernice',
+    "J'ai remarqué des erreurs dans le document",
   ];
 
   @override
@@ -23,6 +32,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(menuLabels[3]),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
+        ],
       ),
       drawer: CustomDrawer(),
       body: ((chatUserList == null) || chatUserList.isEmpty)
@@ -62,23 +74,26 @@ class _ChatListScreenState extends State<ChatListScreen> {
               ),
             )
           : ListView(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
               children: [
-                for (var i = 0; i < chatUserList.length; i += 2)
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      backgroundImage: AssetImage(AppAssets.defaultProfile),
+                for (var i = 0; i < chatUserList.length; i += 3)
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ),
                     ),
-                    title: Text(chatUserList[i]),
-                    subtitle: Text(chatUserList[i + 1]),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        backgroundImage: AssetImage(chatUserList[i]),
+                      ),
+                      title: Text(chatUserList[i + 1]),
+                      subtitle: Text(chatUserList[i + 2]),
+                    ),
                   )
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.edit),
-        backgroundColor: kPrimaryColor,
-      ),
     );
   }
 }

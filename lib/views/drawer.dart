@@ -1,3 +1,8 @@
+import 'package:dezon/views/identityCheckScreen.dart';
+import 'package:dezon/views/pageInProgress.dart';
+import 'package:dezon/views/reportsScreen.dart';
+import 'package:dezon/views/savedProjectsScreen.dart';
+import 'package:dezon/views/settingsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,6 +85,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return Drawer(
       child: SafeArea(
         child: Container(
+          padding: EdgeInsets.only(top: 8),
           color: Colors.white,
           child: Column(
             children: [
@@ -99,7 +105,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   return buildHeader();
                 },
               ),
-              Divider(),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -111,7 +116,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           children: [
                             buildMenuItem(
                               text: 'Mon profil',
-                              icon: Icons.verified_user,
+                              icon: Icons.account_circle_outlined,
                               onClicked: () {
                                 if (![null, -888].contains(userId.value)) {
                                   Navigator.of(context).pop();
@@ -127,12 +132,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                             buildMenuItem(
                               text: 'Portefeuille',
-                              icon: Icons.credit_card,
-                              onClicked: () {},
+                              icon: Icons.credit_card_outlined,
+                              onClicked: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PageInProgress(),
+                                  ),
+                                );
+                              },
                             ),
                             ExpansionTile(
                               leading: Icon(
-                                Icons.library_books,
+                                Icons.library_books_outlined,
                                 color: Colors.black,
                               ),
                               tilePadding: EdgeInsets.all(0),
@@ -150,14 +162,81 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     children: [
                                       buildMenuItem(
                                         text: 'Afficher',
-                                        icon: Icons.visibility,
-                                        onClicked: () {},
+                                        icon: Icons.visibility_outlined,
+                                        onClicked: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PageInProgress(),
+                                            ),
+                                          );
+                                        },
                                         division: true,
                                       ),
                                       buildMenuItem(
                                         text: 'Publier',
                                         icon: Icons.add,
-                                        onClicked: () {},
+                                        onClicked: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PageInProgress(),
+                                            ),
+                                          );
+                                        },
+                                        division: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ExpansionTile(
+                              leading: Icon(
+                                Icons.work_outline,
+                                color: Colors.black,
+                              ),
+                              tilePadding: EdgeInsets.all(0),
+                              title: Text(
+                                'Mes Services',
+                                style: TextStyle(
+                                  //fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Column(
+                                    children: [
+                                      buildMenuItem(
+                                        text: 'Afficher',
+                                        icon: Icons.visibility_outlined,
+                                        onClicked: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PageInProgress(),
+                                            ),
+                                          );
+                                        },
+                                        division: true,
+                                      ),
+                                      buildMenuItem(
+                                        text: 'Publier',
+                                        icon: Icons.add,
+                                        onClicked: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PageInProgress(),
+                                            ),
+                                          );
+                                        },
                                         division: true,
                                       ),
                                     ],
@@ -167,13 +246,51 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                             buildMenuItem(
                               text: 'Enregistrés',
-                              icon: Icons.bookmark,
-                              onClicked: () {},
+                              icon: Icons.bookmark_outline,
+                              onClicked: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => SavedProjectsScreen(),
+                                  ),
+                                );
+                              },
                             ),
                             buildMenuItem(
-                              text: 'Paramètres',
-                              icon: Icons.settings,
-                              onClicked: () {},
+                              text: "Litiges",
+                              icon: Icons.report_outlined,
+                              onClicked: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ReportsScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                            buildMenuItem(
+                              text: "Vérification de l'identité",
+                              icon: Icons.check_circle_outline,
+                              onClicked: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => IdentityCheckScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                            buildMenuItem(
+                              text: 'Réglages',
+                              icon: Icons.settings_outlined,
+                              onClicked: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => SettingsScreen(),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),

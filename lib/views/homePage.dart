@@ -3,11 +3,14 @@ import 'package:dezon/constants.dart';
 import 'package:dezon/views/chatListScreen.dart';
 import 'package:dezon/views/drawer.dart';
 import 'package:dezon/views/projectsList.dart';
+import 'package:dezon/views/searchPage.dart';
 import 'package:dezon/views/servicesList.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'serviceCard.dart';
 
 final List<String> menuLabels = [
   'Dezon',
@@ -69,7 +72,7 @@ class _HomePageState extends State<HomePage> {
           showUnselectedLabels: false,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.home_outlined),
               activeIcon: Container(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 decoration: BoxDecoration(
@@ -183,54 +186,30 @@ class _HomeContentState extends State<HomeContent> {
           width: 40,
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+          IconButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SearchPage(),
+              ),
+            ),
+            icon: Icon(Icons.search),
+          ),
         ],
       ),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(12, 12, 5, 20),
+        padding: EdgeInsets.fromLTRB(15, 10, 15, 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /* ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  Colors.white,
-                ),
-                elevation: MaterialStateProperty.all(3),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
+            Text(
+              "Nouveautés",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
               ),
-              onPressed: () {},
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.search,
-                    color: Colors.black,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    "Je cherche ...",
-                    style: TextStyle(fontSize: 16, color: Colors.black),
-                  ),
-                ],
-              ),
-            ), */
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Text(
-                  "Nouveautés",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                ),
-              ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 7),
             Container(
               height: 170,
               child: Swiper(
@@ -246,30 +225,22 @@ class _HomeContentState extends State<HomeContent> {
                 control: SwiperControl(color: Colors.brown, size: 40),
               ),
             ),
-            SizedBox(height: 25),
+            SizedBox(height: 12),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Services en vogue",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text("Tout voir"),
-                    ),
-                  ],
+                Text(
+                  "Services à la une",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                  ),
                 ),
                 SizedBox(height: 5),
                 FutureBuilder(
                   future: http.get(
                     Uri.parse(
-                      ApiRoutes.host + "/index.php/wp-json/api/services/last",
+                      ApiRoutes.host + ApiRoutes.lastServices,
                     ),
                   ),
                   builder: (context, snapshot) {
@@ -300,129 +271,17 @@ class _HomeContentState extends State<HomeContent> {
                                   i++)
                                 Container(
                                   //height: fullHeight(context) * 0.5,
-                                  width: fullWidth(context) * 0.8,
-                                  child: Card(
-                                    elevation: 4,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 5),
-                                          (respBody[i]['image'] != null)
-                                              ? Image.network(
-                                                  respBody[i]['image'],
-                                                  height: fullHeight(context) *
-                                                      0.13,
-                                                  width: double.infinity,
-                                                  fit: BoxFit.fitWidth,
-                                                )
-                                              : Image.asset(
-                                                  AppAssets.category1,
-                                                  height: fullHeight(context) *
-                                                      0.13,
-                                                  width: double.infinity,
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            respBody[i]['title'] ?? "",
-                                            textAlign: TextAlign.center,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 3,
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(height: 3),
-                                          Row(
-                                            //mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.check_circle,
-                                                color: Colors.green,
-                                                size: 20,
-                                              ),
-                                              Flexible(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4.0),
-                                                  child: Text(
-                                                    respBody[i][
-                                                            'freelancer-name'] ??
-                                                        "",
-                                                    textAlign: TextAlign.center,
-                                                    /* style: TextStyle(
-                                                fontSize: 15,
-                                              ), */
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Table(
-                                              defaultVerticalAlignment:
-                                                  TableCellVerticalAlignment
-                                                      .middle,
-                                              children: [
-                                                TableRow(
-                                                  children: [
-                                                    Text(
-                                                      "Budget Min.",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    Text(
-                                                      "Commandes",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    Text(
-                                                      "Note",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ],
-                                                ),
-                                                TableRow(
-                                                  children: [
-                                                    Text(
-                                                      respBody[i]['price'] ??
-                                                          "",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    Text(
-                                                      (respBody[i]['queued'] !=
-                                                              null)
-                                                          ? (respBody[i]
-                                                                  ['queued']
-                                                              .toString()
-                                                              .split(' ')[0])
-                                                          : "",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                    Text(
-                                                      "0",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                  width: fullWidth(context) * 0.89,
+                                  child: ServiceCard(
+                                    image: respBody[i]['image'],
+                                    title: respBody[i]['title'],
+                                    freelancerName: respBody[i]
+                                        ['freelancer-name'],
+                                    freelancerPhoto: respBody[i]
+                                        ['freelancer-photo-profile'],
+                                    price: respBody[i]['price'],
+                                    queued: respBody[i]['queued'],
+                                    rates: "0",
                                   ),
                                 )
                             ],
@@ -443,24 +302,16 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 7),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Top Prestataires",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text("Tout voir"),
-                    ),
-                  ],
+                Text(
+                  "Top Prestataires",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                  ),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -545,15 +396,96 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             Text(
-              "\"Embaucher un prestataire chez Dezon, c'est avoir la garantie du travail bien fait.\"",
+              "Comment ça marche?",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "1- Choisissez un prestataire",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Center(
+                    child: Image.network(
+                      "https://dezon.app/wp-content/uploads/2021/07/service1.png",
+                      height: 120,
+                      width: 200,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Text(
+                    "2- Echangez via notre messagerie",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Center(
+                    child: Image.network(
+                      "https://dezon.app/wp-content/uploads/2021/07/service2.png",
+                      height: 120,
+                      width: 200,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Text(
+                    "3- Payez à la fin de la prestration",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Center(
+                    child: Image.network(
+                      "https://dezon.app/wp-content/uploads/2021/07/service3.png",
+                      height: 120,
+                      width: 200,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Commencez maintenant",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "Pour exercer dans le secteur des services, il n’est pas toujours obligatoire d’avoir un diplôme. Les aides à domicile comme le ménage, le repassage ou le lavage de vitres, le montage de meubles, le déplacement de l’électroménager ou le déménagement ne nécessitent aucune formation particulière. Inscrivez vous sur Dezon, pour proposer vos services à nos clients.",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 30),
           ],
         ),
       ),

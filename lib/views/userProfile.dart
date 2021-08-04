@@ -46,6 +46,15 @@ class _UserProfileState extends State<UserProfile> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
+                      builder: (context) =>
+                          EditProfile(infos: infos.value, part2: true),
+                    ),
+                  );
+                  break;
+                case 3:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
                       builder: (context) => ModifyPassword(),
                     ),
                   );
@@ -56,12 +65,16 @@ class _UserProfileState extends State<UserProfile> {
             itemBuilder: (context) => [
               if (infos != null)
                 PopupMenuItem(
-                  child: Text("Modifier Informations"),
+                  child: Text("Modifier Informations de base"),
                   value: 1,
                 ),
               PopupMenuItem(
-                child: Text("Modifier Mot de passe"),
+                child: Text("Modifier Parcours & Expériences"),
                 value: 2,
+              ),
+              PopupMenuItem(
+                child: Text("Modifier Mot de passe"),
+                value: 3,
               )
             ],
           ),
@@ -431,7 +444,7 @@ class _UserProfileState extends State<UserProfile> {
                               ),
                             ),
                             title: Text('Type de prestation'),
-                            subtitle: Text(respBody["freelance-type"]),
+                            subtitle: Text(respBody["freelance-type"] ?? ''),
                           ),
                           Divider(height: 1),
                           ListTile(
@@ -444,7 +457,8 @@ class _UserProfileState extends State<UserProfile> {
                               child: Icon(Icons.location_on),
                             ),
                             title: Text('Localisation'),
-                            subtitle: Text(respBody["freelancer-locations"]),
+                            subtitle:
+                                Text(respBody["freelancer-locations"] ?? ''),
                           ),
                           Divider(height: 1),
                           ListTile(

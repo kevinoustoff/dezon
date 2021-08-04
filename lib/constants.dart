@@ -100,10 +100,12 @@ class ApiRoutes {
   static const String host = "https://dezon.app/";
   static const String termsAndConditions = "index.php/terms-and-conditions/";
   static const forgotPassword = "";
-  static const modifyPass = "";
+  static const modifyPass = "index.php/wp-json/api/recover-password";
   static const login = "index.php/wp-json/api/login";
   static const register = "index.php/wp-json/api/register";
   static const showProfile = "index.php/wp-json/api/profile?uid=";
+  static const fetchProjects = "index.php/wp-json/api/projets";
+  static const lastServices = "index.php/wp-json/api/services/last";
   static const sectionLanguesPrestataires =
       "/index.php/wp-json/api/langues-prestataires";
   static const sectionSexes = "index.php/wp-json/api/sexes";
