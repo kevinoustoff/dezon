@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 
 import 'makeOfferScreen.dart';
 import 'projectDetailsScreen.dart';
 
 class ProjectCard extends StatefulWidget {
-  final String id,
-      estimatedHours,
+  final int id;
+  final String estimatedHours,
       hourlyPrice,
       cost,
       employerName,
@@ -13,6 +14,7 @@ class ProjectCard extends StatefulWidget {
       level,
       freelancerType,
       projectExpiry,
+      title,
       description,
       offres,
       location;
@@ -27,6 +29,7 @@ class ProjectCard extends StatefulWidget {
     @required this.level,
     @required this.freelancerType,
     @required this.projectExpiry,
+    @required this.title,
     @required this.description,
     @required this.savedSkills,
     @required this.offres,
@@ -53,7 +56,7 @@ class _ProjectCardState extends State<ProjectCard> {
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ProjectDetailsScreen(
-            id: widget.id,
+            id: widget.id.toString(),
           ),
         ),
       ),
@@ -69,14 +72,17 @@ class _ProjectCardState extends State<ProjectCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.description ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    child: RichText(
+                      text: HTML.toTextSpan(
+                        context,
+                        widget.title ?? '',
+                        defaultTextStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   SizedBox(width: 15),
@@ -121,10 +127,13 @@ class _ProjectCardState extends State<ProjectCard> {
                       ),
                   ],
                 ),
-              Text(
-                widget.description ?? '',
-                overflow: TextOverflow.ellipsis,
+              RichText(
+                text: HTML.toTextSpan(
+                  context,
+                  widget.description ?? '',
+                ),
                 maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
               Divider(thickness: 1),
               Row(

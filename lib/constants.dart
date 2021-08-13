@@ -68,6 +68,17 @@ bool _containNumeric(String s) {
   return false;
 }
 
+String numberValidator(String value, {bool required = false}) {
+  if (value == null || value.isEmpty) {
+    return required ? "Entrez une valeur" : null;
+  }
+  final n = num.tryParse(value);
+  if (n == null) {
+    return 'Ce nombre est invalide';
+  }
+  return null;
+}
+
 String validateNom(String s) {
   if (s == null || s.isEmpty) {
     return "N'oubliez pas votre nom!";
@@ -104,10 +115,14 @@ class ApiRoutes {
   static const login = "index.php/wp-json/api/login";
   static const register = "index.php/wp-json/api/register";
   static const showProfile = "index.php/wp-json/api/profile?uid=";
+  static const searchServices = "index.php/wp-json/api/services/search/?title=";
+  static const searchProjects = "index.php/wp-json/api/projets/search/?title=";
   static const fetchProjects = "index.php/wp-json/api/projets";
-  static const lastServices = "index.php/wp-json/api/services/last";
+  static const fetchProjectById = "index.php/wp-json/api/projet/?id=";
+  static const fetchServiceById = "index.php/wp-json/api/service/?id=";
+  static const topServices = "index.php/wp-json/api/services/last";
   static const sectionLanguesPrestataires =
-      "/index.php/wp-json/api/langues-prestataires";
+      "index.php/wp-json/api/langues-prestataires";
   static const sectionSexes = "index.php/wp-json/api/sexes";
   static const sectionEnglishLevels = "index.php/wp-json/api/english-levels";
   static const sectionLocations = "index.php/wp-json/api/locations";

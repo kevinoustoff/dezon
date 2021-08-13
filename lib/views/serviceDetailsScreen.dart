@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:simple_html_css/simple_html_css.dart';
+import 'dart:convert';
+
+import '../constants.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
   final String id;
@@ -8,6 +13,33 @@ class ServiceDetailsScreen extends StatefulWidget {
 }
 
 class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
+  Future<Map> futureServiceData;
+
+  @override
+  void initState() {
+    futureServiceData = fetchData();
+    super.initState();
+  }
+
+  Future<Map> fetchData() async {
+    final response = await http.get(
+      Uri.parse(
+        ApiRoutes.host + ApiRoutes.fetchServiceById + widget.id,
+      ),
+    );
+    print("Status Code: " +
+        response.statusCode.toString() +
+        '\n' +
+        "Body: " +
+        "${response.body}");
+
+    if (response.statusCode.toString().startsWith('20')) {
+      return Map.from(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TextStyle aStyle = const TextStyle(color: Colors.black54);
@@ -16,13 +48,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         title: Text('Détails du service'),
         actions: [
           TextButton(
-            onPressed:
-                /* () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => MakeOfferScreen(),
-              ),
-            ), */
-                () {},
+            onPressed: () {},
             child: Text(
               'PAYER',
               textAlign: TextAlign.center,
@@ -38,123 +64,170 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 20,
+          horizontal: 14,
+          vertical: 15,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                  child: Column(
+        child: FutureBuilder<Map>(
+          future: futureServiceData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              final Map serviceMap = snapshot.data;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Délai de livraison",
-                        style: aStyle,
-                      ),
-                      Text("Entre 1 et 3 jours"),
+                      for (var i = 0; i < 3; i++)
+                        Flexible(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 2.5),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: [
+                                      "Livraison",
+                                      "Temps de réponse",
+                                      "Niveau"
+                                    ][i] +
+                                    '\n',
+                                style: aStyle,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: serviceMap[[
+                                          "delivery-time",
+                                          "response-time",
+                                          "english_level",
+                                        ][i]] ??
+                                        '',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Divider(
+                    thickness: 1,
+                  ),
+                  Text(
+                    serviceMap['title'] ?? '',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  Wrap(
+                    spacing: 15,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
-                        "Temps de réponse",
-                        style: aStyle,
+                        'À partir de',
                       ),
-                      Text("5 H"),
+                      Builder(
+                        builder: (context) {
+                          String dPrice = '';
+                          if (serviceMap["price"] != null) {
+                            dPrice = serviceMap["price"];
+                          } else {
+                            dPrice = (serviceMap["hourly_price"] ?? '0') +
+                                '/h' +
+                                '\n~ ' +
+                                (serviceMap["estimated_hours"] ?? '0') +
+                                ' h';
+                          }
+                          return Text(
+                            dPrice,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
+                        },
+                      )
                     ],
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Niveau",
-                      style: aStyle,
-                    ),
-                    Text("Professionnel"),
-                  ],
-                ),
-                /* Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Languages",
-                      style: aStyle,
-                    ),
-                    Text("Anglais Arabe Espagnol"),
-                  ],
-                ), */
-              ],
-            ),
-            Divider(
-              thickness: 1,
-            ),
-            Text(
-              "Création de Logo Impressionnantes et modernes",
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
-            ),
-            Wrap(
-              spacing: 15,
-              children: [
-                Text(
-                  'À partir de',
-                ),
-                Text(
-                  "5 000 FCFA",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.green,
-                    fontWeight: FontWeight.w500,
+                  SizedBox(height: 5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: 15,
+                        backgroundImage: Image.network(
+                          serviceMap["freelance-photo-profile"],
+                          height: fullHeight(context) * 0.13,
+                          width: double.infinity,
+                          fit: BoxFit.fitWidth,
+                        ).image,
+                      ),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20,
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
+                          child: Text(
+                            serviceMap['freelancer-name'] ?? '',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 5),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 20,
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0, 15, 0, 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black54, width: 0.1),
+                    ),
+                    child: (serviceMap['image'] != null)
+                        ? Image.network(
+                            serviceMap['image'],
+                            height: fullHeight(context) * 0.17,
+                            width: double.infinity,
+                            fit: BoxFit.fitWidth,
+                          )
+                        : Container(
+                            height: fullHeight(context) * 0.13,
+                            width: double.infinity,
+                            color: Colors.black54,
+                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
-                      'Jason',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      'Description',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Text(
-              "Créer un logo est un service qui prend du temps. Ainsi, afin de vous garantir une qualité de conception que j’estime correcte, je vous propose de prendre le Pack Smart à 20 €. La création de votre logo sera ainsi plus complète que celle offerte par le service à 5,00 €.\n\n►►Pour le moindre coût de 5000 F CFA je vous propose la conception de 2 propositions modernes, et cela à partir d'une image prise sur le web ou sur gabarit. Vous devrez vous-même me fournir cette image(s).\n\n►►► Mon Service de base comprend :\n2 Propositions de logo en format JPEG uniquement\n2 modifications (changement de couleur, police ou d'emplacement...)\nFormat (700x700 px), Résolution Standard 72 dpi\nFormat PNG transparente n'est pas incluse.\n►►► Pour un résultat plus affiné, je vous propose d'explorer mes autres Pack ci-dessous :\n",
-            ),
-            SizedBox(height: 35),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: RichText(
+                      text: HTML.toTextSpan(
+                          context, serviceMap["description"] ?? ''),
+                    ),
+                  ),
+                  SizedBox(height: 100),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return Center(child: const CircularProgressIndicator());
+          },
         ),
       ),
     );

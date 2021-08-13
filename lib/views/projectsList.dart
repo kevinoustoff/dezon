@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import '../constants.dart';
 import 'drawer.dart';
 import 'homePage.dart';
-import 'paginationBubble.dart';
 import 'projectCard.dart';
 import 'filterProjects.dart';
 
@@ -26,36 +25,12 @@ class _ProjectsListState extends State<ProjectsList> {
       ),
       drawer: CustomDrawer(),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 4, 8, 10),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(
-                        Icons.arrow_back_ios_outlined,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                    for (var i = 0; i < 4; i++)
-                      PaginationBubble(
-                        isActive: i == 0,
-                        number: i + 1,
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        color: kPrimaryColor,
-                      ),
-                    ),
-                  ],
-                ),
                 TextButton.icon(
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -97,7 +72,7 @@ class _ProjectsListState extends State<ProjectsList> {
                         ];
 
                         return SingleChildScrollView(
-                          padding: EdgeInsets.fromLTRB(2.5, 2.5, 2.5, 30),
+                          padding: EdgeInsets.fromLTRB(2.5, 0, 2.5, 30),
                           child: Column(
                             children: [
                               for (var i = 0; i < respBody.length; i++)
@@ -106,13 +81,14 @@ class _ProjectsListState extends State<ProjectsList> {
                                       ["estimated_hours"],
                                   hourlyPrice: respBody[i]["hourly_price"],
                                   cost: respBody[i]["cost"],
-                                  id: respBody[i]["id"].toString(),
+                                  id: respBody[i]["id"],
                                   employerName: respBody[i]["employer_name"],
                                   duration: respBody[i]["duration"],
                                   level: respBody[i]["level"],
                                   freelancerType: respBody[i]
                                       ["freelancer_type"],
                                   projectExpiry: respBody[i]["project_expiry"],
+                                  title: respBody[i]["title"],
                                   description: respBody[i]["description"],
                                   savedSkills: respBody[i]["saved_skills"],
                                   offres: respBody[i]["offres"].toString(),

@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:dezon/views/paginationBubble.dart';
 import 'package:dezon/views/serviceCard.dart';
-import 'package:dezon/views/serviceDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,13 +24,14 @@ class _ServicesListState extends State<ServicesList> {
       ),
       drawer: CustomDrawer(),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 4, 8, 10),
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment:
+                  MainAxisAlignment.end /* MainAxisAlignment.spaceBetween */,
               children: [
-                Row(
+                /* Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
@@ -55,7 +54,7 @@ class _ServicesListState extends State<ServicesList> {
                       ),
                     ),
                   ],
-                ),
+                ), */
                 TextButton.icon(
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -76,7 +75,7 @@ class _ServicesListState extends State<ServicesList> {
               child: FutureBuilder(
                 future: http.get(
                   Uri.parse(
-                    ApiRoutes.host + ApiRoutes.lastServices,
+                    ApiRoutes.host + ApiRoutes.topServices,
                   ),
                 ),
                 builder: (context, snapshot) {
@@ -96,18 +95,15 @@ class _ServicesListState extends State<ServicesList> {
                           Map.from(jsonDecode(response.body)[i])
                       ];
                       return SingleChildScrollView(
+                        padding: EdgeInsets.fromLTRB(2.5, 0, 2.5, 30),
                         child: Column(
                           children: [
                             for (var i = 0; i < respBody.length; i++)
-                              GestureDetector(
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => ServiceDetailsScreen(
-                                      id: "1",
-                                    ),
-                                  ),
-                                ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 2.5),
                                 child: ServiceCard(
+                                  id: respBody[i]['id'],
                                   image: respBody[i]['image'],
                                   title: respBody[i]['title'],
                                   freelancerName: respBody[i]

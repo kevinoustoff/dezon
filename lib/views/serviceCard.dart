@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
+import 'serviceDetailsScreen.dart';
 
 class ServiceCard extends StatefulWidget {
+  final int id;
   final String image,
       title,
       freelancerName,
@@ -11,6 +13,7 @@ class ServiceCard extends StatefulWidget {
       queued,
       rates;
   ServiceCard({
+    @required this.id,
     @required this.image,
     @required this.title,
     @required this.freelancerName,
@@ -26,27 +29,36 @@ class ServiceCard extends StatefulWidget {
 class _ServiceCardState extends State<ServiceCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ServiceDetailsScreen(
+            id: widget.id.toString(),
+          ),
+        ),
+      ),
+      child: Card(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //SizedBox(height: 5),
-            (widget.image != null)
-                ? Image.network(
-                    widget.image,
-                    height: fullHeight(context) * 0.13,
-                    width: double.infinity,
-                    fit: BoxFit.fitWidth,
-                  )
-                : Image.asset(
-                    AppAssets.category1,
-                    height: fullHeight(context) * 0.13,
-                    width: double.infinity,
-                    fit: BoxFit.fitWidth,
-                  ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black54, width: 0.1),
+              ),
+              child: (widget.image != null)
+                  ? Image.network(
+                      widget.image,
+                      height: fullHeight(context) * 0.13,
+                      width: double.infinity,
+                      fit: BoxFit.fitWidth,
+                    )
+                  : Image.asset(
+                      AppAssets.category1,
+                      height: fullHeight(context) * 0.13,
+                      width: double.infinity,
+                      fit: BoxFit.fitWidth,
+                    ),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Column(
@@ -59,6 +71,7 @@ class _ServiceCardState extends State<ServiceCard> {
                       children: [
                         CircleAvatar(
                           backgroundColor: Colors.grey,
+                          radius: 15,
                           backgroundImage:
                               (![null, ""].contains(widget.freelancerPhoto))
                                   ? NetworkImage(widget.freelancerPhoto)
@@ -89,9 +102,9 @@ class _ServiceCardState extends State<ServiceCard> {
                           widget.title ?? "",
                           //textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
+                          maxLines: 2,
                           style: TextStyle(
-                            fontSize: 17,
+                            fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -110,10 +123,10 @@ class _ServiceCardState extends State<ServiceCard> {
                               (widget.rates != null)
                                   ? (widget.rates.toString().split(' ')[0])
                                   : "",
-                              style: TextStyle(
+                              /* style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
-                              ),
+                              ), */
                             ),
                           ],
                         ),
@@ -125,14 +138,14 @@ class _ServiceCardState extends State<ServiceCard> {
                     //textAlign: TextAlign.center,
                     text: TextSpan(
                       text: "À partir de ",
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                      style: TextStyle(color: Colors.black),
                       children: <TextSpan>[
                         TextSpan(
                           text: (widget.price ?? "") + " F CFA",
                           style: TextStyle(
                             color: Colors.redAccent,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
