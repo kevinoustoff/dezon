@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
-import 'loginScreen.dart';
+import 'auth/loginScreen.dart';
 import 'userProfile.dart';
 
 class CustomDrawer extends StatefulWidget {

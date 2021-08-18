@@ -1,11 +1,11 @@
 import 'package:dezon/constants.dart';
-import 'package:dezon/views/chatListScreen.dart';
-import 'package:dezon/views/projectsList.dart';
-import 'package:dezon/views/servicesList.dart';
+import 'package:dezon/views/bottomBar%20modules/chatListScreen.dart';
+import 'package:dezon/views/bottomBar%20modules/projectsList.dart';
+import 'package:dezon/views/bottomBar%20modules/servicesList.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-import 'homeContent.dart';
+import '../homeContent.dart';
 
 final List<String> menuLabels = [
   'Dezon',

@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:dezon/components/dataConnectionChecker.dart';
-import 'package:dezon/views/forgotPasswordScreen.dart';
-import 'package:dezon/views/registerScreen.dart';
+import 'package:dezon/views/auth/forgotPasswordScreen.dart';
+import 'package:dezon/views/auth/registerScreen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants.dart';
-import 'homePage.dart';
+import '../../constants.dart';
+import '../bottomBar modules/homePage.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

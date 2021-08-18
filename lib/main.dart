@@ -1,4 +1,4 @@
-import 'package:dezon/views/homePage.dart';
+import 'package:dezon/views/bottomBar%20modules/homePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dezon/constants.dart';
@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'states/AuthState.dart';
 import 'package:provider/provider.dart';
 
-import 'views/loginScreen.dart';
-import 'views/registerScreen.dart';
+import 'views/auth/loginScreen.dart';
+import 'views/auth/registerScreen.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(

@@ -1,8 +1,8 @@
 import 'package:dezon/constants.dart';
 import 'package:flutter/material.dart';
 
-import 'chatScreen.dart';
-import 'drawer.dart';
+import '../chatScreen.dart';
+import '../drawer.dart';
 import 'homePage.dart';
 
 class ChatListScreen extends StatefulWidget {

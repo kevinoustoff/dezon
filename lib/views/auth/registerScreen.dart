@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
-import '../constants.dart';
-import 'homePage.dart';
+import '../../constants.dart';
+import '../bottomBar modules/homePage.dart';
 import 'loginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {

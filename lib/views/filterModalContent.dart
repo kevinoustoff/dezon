@@ -5,7 +5,30 @@ import '../constants.dart';
 
 class FilterModalContent extends StatefulWidget {
   final bool isService;
-  FilterModalContent({@required this.isService});
+  final Map initialValues;
+  final List locationsS,
+      delais,
+      englishLevels,
+      categoriesS,
+      locationsP,
+      languages,
+      categoriesP;
+
+  FilterModalContent({
+    @required this.isService,
+    @required this.initialValues,
+
+    ///SERVICE
+    @required this.locationsS,
+    @required this.delais,
+    @required this.englishLevels,
+    @required this.categoriesS,
+
+    ///PROJECT
+    @required this.locationsP,
+    @required this.languages,
+    @required this.categoriesP,
+  });
   @override
   _FilterModalContentState createState() => _FilterModalContentState();
 }
@@ -15,68 +38,51 @@ class _FilterModalContentState extends State<FilterModalContent> {
   ValueNotifier<bool> formError = ValueNotifier(false);
   List<bool> _isExpanded0 = List.generate(4, (_) => false);
   List<bool> _isExpanded1 = List.generate(5, (_) => false);
-  TextEditingController _minPriceController, _maxPriceController;
   String priceMin, priceMax;
-  List<String> categorieProjectList = [
-    "Audio visuel",
-    "Clip vidéo",
-    "Jardinage",
-    "Video & Animation",
-    "VideoGrapher",
-  ];
-  List<String> categorieServiceList = [
-    "Aide à la personne",
-    "Livraison de matériel",
-    "Audio visuel",
-    "Clip vidéo",
-    "Bricolage",
-    "Design et graphisme",
-    "Logo",
-    "Plan travaux d'architecture",
-    "Formation et coaching",
-  ];
-  List<String> delaisList = [
-    "1 mois",
-    "1 semaine",
-    "6 mois",
-    "En 1h",
-    "Entre 1 et 3 jours",
-    "Entre 2 et 3 mois",
-  ];
-  List<String> niveauxList = [
-    "Débutant",
-    "Intermédiaire",
-    "Professionnel",
-  ];
-  List<String> paysServiceList = [
-    "Abidjan",
-    "Aného",
-    "Cotonou",
-    "Dakar",
-    "Douala",
-    "Lomé",
-    "USA",
-  ];
-  List<String> langueList = [
-    'Anglais',
-    'Arabe',
-    'Chinois',
-    'Espagnol',
-    'Français',
-  ];
-  List<String> paysProjectList = [
-    "Bénin",
-    "Mali",
-    "Gao",
-    "Togo",
-    "Lomé",
-  ];
+  List locationsS = [],
+      delais = [],
+      englishLevels = [],
+      categoriesS = [],
+      locationsP = [],
+      languages = [],
+      categoriesP = [];
 
   @override
   void initState() {
+    if (mounted) {
+      setState(() {
+        if (widget.isService) {
+          priceMin = widget.initialValues['price-minS'] ?? '';
+          priceMax = widget.initialValues['price-maxS'] ?? '';
+          locationsS = widget.initialValues['locationsS'] ?? [];
+          delais = widget.initialValues['delais'] ?? [];
+          englishLevels = widget.initialValues['english-levels'] ?? [];
+          categoriesS = widget.initialValues['categoriesS'] ?? [];
+        } else {
+          priceMin = widget.initialValues['price-minP'] ?? '';
+          priceMax = widget.initialValues['price-maxP'] ?? '';
+          locationsP = widget.initialValues['locationsP'] ?? [];
+          languages = widget.initialValues['languages'] ?? [];
+          categoriesP = widget.initialValues['categoriesP'] ?? [];
+        }
+      });
+    } else {
+      if (widget.isService) {
+        priceMin = widget.initialValues['price-minS'] ?? '';
+        priceMax = widget.initialValues['price-maxS'] ?? '';
+        locationsS = widget.locationsS ?? [];
+        delais = widget.delais ?? [];
+        englishLevels = widget.englishLevels ?? [];
+        categoriesS = widget.categoriesS ?? [];
+      } else {
+        priceMin = widget.initialValues['price-minP'] ?? '';
+        priceMax = widget.initialValues['price-maxP'] ?? '';
+        locationsP = widget.locationsP ?? [];
+        languages = widget.languages ?? [];
+        categoriesP = widget.categoriesP ?? [];
+      }
+    }
     super.initState();
-    _minPriceController = TextEditingController();
-    _maxPriceController = TextEditingController();
   }
 
   @override
@@ -110,16 +116,41 @@ class _FilterModalContentState extends State<FilterModalContent> {
                         _formKey.currentState.save();
                         Navigator.pop(
                           context,
-                          {
-                            'didApply': true,
-                            'isService': widget.isService,
-                            'priceMin': int.tryParse(priceMin ?? '0') ?? 0,
-                            'priceMax': int.tryParse(priceMax ?? '0') ?? 0,
-                            'languages': [],
-                            'categories': [],
-                            'locations': [],
-                            if (widget.isService) 'delais': [],
-                          },
+                          Map.from({})
+                            ..addAll(<String, dynamic>{
+                              'didApply': true,
+                              'isService': widget.isService,
+                            })
+                            ..addAll(
+                              widget.isService
+                                  ? {
+                                      'price-minS':
+                                          [null, ''].contains(priceMin)
+                                              ? '0'
+                                              : priceMin,
+                                      'price-maxS':
+                                          [null, ''].contains(priceMax)
+                                              ? '0'
+                                              : priceMax,
+                                      'locationsS': locationsS,
+                                      'delais': delais,
+                                      'english-levels': englishLevels,
+                                      'categoriesS': categoriesS,
+                                    }
+                                  : {
+                                      'price-minP':
+                                          [null, ''].contains(priceMin)
+                                              ? '0'
+                                              : priceMin,
+                                      'price-maxP':
+                                          [null, ''].contains(priceMax)
+                                              ? '0'
+                                              : priceMax,
+                                      'locationsP': locationsP,
+                                      'languages': languages,
+                                      'categoriesP': categoriesP,
+                                    },
+                            ),
                         );
                       } else {
                         formError.value = true;
@@ -161,96 +192,7 @@ class _FilterModalContentState extends State<FilterModalContent> {
                           _isExpanded0[index] = !isExpanded;
                       }),
                       children: [
-                        if (!widget.isService)
-                          for (int i = 0; i < 4; i++)
-                            ExpansionPanel(
-                              canTapOnHeader: true,
-                              body: Column(
-                                children: [
-                                  if (i == 1)
-                                    Row(
-                                      children: [
-                                        for (var k = 0; k < 2; k++)
-                                          Expanded(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      15, 0, 15, 15),
-                                              child: TextFormField(
-                                                controller: k == 0
-                                                    ? _minPriceController
-                                                    : _maxPriceController,
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                inputFormatters: <
-                                                    TextInputFormatter>[
-                                                  FilteringTextInputFormatter
-                                                      .allow(RegExp(r'[0-9]')),
-                                                ],
-                                                validator: numberValidator,
-                                                decoration: new InputDecoration(
-                                                  contentPadding:
-                                                      EdgeInsets.fromLTRB(
-                                                          5, 0, 0, 0),
-                                                  hintText:
-                                                      k == 0 ? "Min" : "Max",
-                                                ),
-                                                onSaved: (newValue) => setState(
-                                                  () {
-                                                    if (k == 0)
-                                                      priceMin = newValue;
-                                                    else
-                                                      priceMax = newValue;
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  if ([0, 2, 3].contains(i))
-                                    Builder(
-                                      builder: (context) {
-                                        List tmp = (i == 0
-                                            ? categorieProjectList
-                                            : (i == 2
-                                                ? langueList
-                                                : paysProjectList));
-                                        return Column(
-                                          children: [
-                                            for (var j = 0; j < tmp.length; j++)
-                                              CheckboxListTile(
-                                                title: Text(tmp[j]),
-                                                onChanged: (bool value) {},
-                                                value: false,
-                                                isThreeLine: false,
-                                                dense: true,
-                                              ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                ],
-                              ),
-                              headerBuilder: (_, isExpanded) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text([
-                                        "Catégorie",
-                                        "Prix",
-                                        "Langue(s)",
-                                        "Localisation(s)"
-                                      ][i]),
-                                    ],
-                                  ),
-                                );
-                              },
-                              isExpanded: _isExpanded0[i],
-                            )
-                        else
+                        if (widget.isService)
                           for (int i = 0; i < 5; i++)
                             ExpansionPanel(
                               canTapOnHeader: true,
@@ -266,9 +208,6 @@ class _FilterModalContentState extends State<FilterModalContent> {
                                                   const EdgeInsets.fromLTRB(
                                                       15, 0, 15, 15),
                                               child: TextFormField(
-                                                controller: k == 0
-                                                    ? _minPriceController
-                                                    : _maxPriceController,
                                                 keyboardType:
                                                     TextInputType.number,
                                                 inputFormatters: <
@@ -284,6 +223,11 @@ class _FilterModalContentState extends State<FilterModalContent> {
                                                   hintText:
                                                       k == 0 ? "Min" : "Max",
                                                 ),
+                                                initialValue: k == 0
+                                                    ? widget.initialValues[
+                                                        'price-minS']
+                                                    : widget.initialValues[
+                                                        'price-maxS'],
                                                 onSaved: (newValue) => setState(
                                                   () {
                                                     if (k == 0)
@@ -301,19 +245,75 @@ class _FilterModalContentState extends State<FilterModalContent> {
                                     Builder(
                                       builder: (context) {
                                         List tmp = (i == 0
-                                            ? categorieServiceList
+                                            ? widget.categoriesS
                                             : i == 1
-                                                ? delaisList
+                                                ? widget.delais
                                                 : (i == 3
-                                                    ? niveauxList
-                                                    : paysServiceList));
+                                                    ? widget.englishLevels
+                                                    : widget.locationsS));
                                         return Column(
                                           children: [
                                             for (var j = 0; j < tmp.length; j++)
                                               CheckboxListTile(
-                                                title: Text(tmp[j]),
-                                                onChanged: (bool value) {},
-                                                value: false,
+                                                title: Text(tmp[j]['name']),
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    if (i == 0) {
+                                                      if (!value) {
+                                                        categoriesS.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        categoriesS = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...categoriesS
+                                                        ].toSet().toList();
+                                                    } else if (i == 1) {
+                                                      if (!value) {
+                                                        delais.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        delais = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...delais
+                                                        ].toSet().toList();
+                                                    } else if (i == 3) {
+                                                      if (!value) {
+                                                        englishLevels.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        englishLevels = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...englishLevels
+                                                        ].toSet().toList();
+                                                    } else {
+                                                      if (!value) {
+                                                        locationsS.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        locationsS = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...locationsS
+                                                        ].toSet().toList();
+                                                    }
+                                                  });
+                                                },
+                                                value: (i == 0
+                                                        ? categoriesS
+                                                        : i == 1
+                                                            ? delais
+                                                            : (i == 3
+                                                                ? englishLevels
+                                                                : locationsS))
+                                                    .contains(
+                                                        tmp[j]['term_id']),
                                                 isThreeLine: false,
                                                 dense: true,
                                               ),
@@ -341,6 +341,140 @@ class _FilterModalContentState extends State<FilterModalContent> {
                                 );
                               },
                               isExpanded: _isExpanded1[i],
+                            )
+                        else
+                          for (int i = 0; i < 4; i++)
+                            ExpansionPanel(
+                              canTapOnHeader: true,
+                              body: Column(
+                                children: [
+                                  if (i == 1)
+                                    Row(
+                                      children: [
+                                        for (var k = 0; k < 2; k++)
+                                          Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      15, 0, 15, 15),
+                                              child: TextFormField(
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                inputFormatters: <
+                                                    TextInputFormatter>[
+                                                  FilteringTextInputFormatter
+                                                      .allow(RegExp(r'[0-9]')),
+                                                ],
+                                                validator: numberValidator,
+                                                decoration: new InputDecoration(
+                                                  contentPadding:
+                                                      EdgeInsets.fromLTRB(
+                                                          5, 0, 0, 0),
+                                                  hintText:
+                                                      k == 0 ? "Min" : "Max",
+                                                ),
+                                                initialValue: k == 0
+                                                    ? widget.initialValues[
+                                                        'price-minP']
+                                                    : widget.initialValues[
+                                                        'price-maxP'],
+                                                onSaved: (newValue) => setState(
+                                                  () {
+                                                    if (k == 0)
+                                                      priceMin = newValue;
+                                                    else
+                                                      priceMax = newValue;
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  if ([0, 2, 3].contains(i))
+                                    Builder(
+                                      builder: (context) {
+                                        List tmp = (i == 0
+                                            ? widget.categoriesP
+                                            : (i == 2
+                                                ? widget.languages
+                                                : widget.locationsP));
+                                        return Column(
+                                          children: [
+                                            for (var j = 0; j < tmp.length; j++)
+                                              CheckboxListTile(
+                                                title: Text(tmp[j]['name']),
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    if (i == 0) {
+                                                      if (!value) {
+                                                        categoriesP.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        categoriesP = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...categoriesP
+                                                        ].toSet().toList();
+                                                    } else if (i == 2) {
+                                                      if (!value) {
+                                                        languages.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        languages = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...languages
+                                                        ].toSet().toList();
+                                                    } else {
+                                                      if (!value) {
+                                                        locationsP.remove(
+                                                            tmp[j]['term_id']);
+                                                      } else
+                                                        locationsP = [
+                                                          ...[
+                                                            tmp[j]['term_id']
+                                                          ],
+                                                          ...locationsP
+                                                        ].toSet().toList();
+                                                    }
+                                                  });
+                                                },
+                                                value: (i == 0
+                                                        ? categoriesP
+                                                        : (i == 2
+                                                            ? languages
+                                                            : locationsP))
+                                                    .contains(
+                                                        tmp[j]['term_id']),
+                                                isThreeLine: false,
+                                                dense: true,
+                                              ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                ],
+                              ),
+                              headerBuilder: (_, isExpanded) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text([
+                                        "Catégorie",
+                                        "Prix",
+                                        "Langue(s)",
+                                        "Localisation(s)"
+                                      ][i]),
+                                    ],
+                                  ),
+                                );
+                              },
+                              isExpanded: _isExpanded0[i],
                             )
                       ],
                     ),

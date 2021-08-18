@@ -4,9 +4,9 @@ import 'package:dezon/views/serviceCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../constants.dart';
-import 'drawer.dart';
-import 'filterServices.dart';
+import '../../constants.dart';
+import '../drawer.dart';
+import '../filterServices.dart';
 import 'homePage.dart';
 
 class ServicesList extends StatefulWidget {

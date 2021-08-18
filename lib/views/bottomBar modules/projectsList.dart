@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../constants.dart';
-import 'drawer.dart';
+import '../../constants.dart';
+import '../drawer.dart';
 import 'homePage.dart';
-import 'projectCard.dart';
-import 'filterProjects.dart';
+import '../projectCard.dart';
+import '../filterProjects.dart';
 
 class ProjectsList extends StatefulWidget {
   @override

@@ -120,6 +120,8 @@ class ApiRoutes {
   static const fetchProjects = "index.php/wp-json/api/projets";
   static const fetchProjectById = "index.php/wp-json/api/projet/?id=";
   static const fetchServiceById = "index.php/wp-json/api/service/?id=";
+  static const fetchSearchFilters =
+      "index.php/wp-json/api/services/search/filters";
   static const topServices = "index.php/wp-json/api/services/last";
   static const sectionLanguesPrestataires =
       "index.php/wp-json/api/langues-prestataires";
@@ -143,3 +145,19 @@ class AppAssets {
   static const worker3 = "assets/images/worker3.jpg";
   static const worker4 = "assets/images/worker4.jpg";
 }
+
+const List keyzS = [
+  'price-minS',
+  'price-maxS',
+  'locationsS',
+  'delais',
+  'english-levels',
+  'categoriesS',
+];
+const List keyzP = [
+  'price-minP',
+  'price-maxP',
+  'locationsP',
+  'languages',
+  'categoriesP',
+];

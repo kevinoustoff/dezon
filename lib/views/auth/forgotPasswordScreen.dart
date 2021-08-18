@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:http/http.dart' as http;
 
-import '../constants.dart';
+import '../../constants.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
