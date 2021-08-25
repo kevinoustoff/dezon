@@ -1,9 +1,7 @@
 import 'package:dezon/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../chatScreen.dart';
-import '../drawer.dart';
-import 'homePage.dart';
+import 'chatScreen.dart';
 
 class ChatListScreen extends StatefulWidget {
   @override
@@ -29,14 +27,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(menuLabels[3]),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
-        ],
-      ),
-      drawer: CustomDrawer(),
       body: ((chatUserList == null) || chatUserList.isEmpty)
           ? Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),

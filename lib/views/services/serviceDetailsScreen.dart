@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:simple_html_css/simple_html_css.dart';
 import 'dart:convert';
 
-import '../constants.dart';
+import '../../constants.dart';
 
 class ServiceDetailsScreen extends StatefulWidget {
   final String id;
@@ -27,11 +27,11 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         ApiRoutes.host + ApiRoutes.fetchServiceById + widget.id,
       ),
     );
-    print("Status Code: " +
+    /* print("Status Code: " +
         response.statusCode.toString() +
         '\n' +
         "Body: " +
-        "${response.body}");
+        "${response.body}"); */
 
     if (response.statusCode.toString().startsWith('20')) {
       return Map.from(jsonDecode(response.body));
@@ -138,9 +138,12 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
+                        SizedBox(height: 10),
                         Wrap(
                           spacing: 15,
                           crossAxisAlignment: WrapCrossAlignment.center,
+                          runAlignment: WrapAlignment.center,
+                          alignment: WrapAlignment.center,
                           children: [
                             Text(
                               'À partir de',
@@ -163,7 +166,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 3,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 17,
                                     color: Colors.redAccent,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -172,13 +175,13 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                             )
                           ],
                         ),
-                        SizedBox(height: 5),
+                        SizedBox(height: 10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CircleAvatar(
                               backgroundColor: Colors.grey,
-                              radius: 15,
+                              radius: 20,
                               backgroundImage: Image.network(
                                 serviceMap["freelance-photo-profile"],
                                 height: fullHeight(context) * 0.13,
@@ -204,6 +207,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Text(

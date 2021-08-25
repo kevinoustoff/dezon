@@ -90,9 +90,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                             'email': email,
                                           },
                                         );
-                                        print(
+                                        /* print(
                                             "Response Status code: ${resp.statusCode}");
-                                        print("Response body: ${resp.body}");
+                                        print("Response body: ${resp.body}"); */
                                         if (resp.statusCode
                                             .toString()
                                             .startsWith('20')) {
@@ -125,7 +125,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                           );
                                         }
                                       } catch (e) {
-                                        print("Error: $e");
+                                        //print("Error: $e");
                                       }
                                       setState(() => showSpinner = false);
                                     } else {

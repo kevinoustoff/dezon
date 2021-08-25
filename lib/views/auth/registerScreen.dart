@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
-import '../bottomBar modules/homePage.dart';
+import '../home/homePage.dart';
 import 'loginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -194,9 +194,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       },
                                     ),
                                   );
-                                  print(
+                                  /* print(
                                       "Response Status code: ${resp.statusCode}");
-                                  print("Response body: ${resp.body}");
+                                  print("Response body: ${resp.body}"); */
                                   if (resp.statusCode
                                       .toString()
                                       .startsWith('20')) {
@@ -292,7 +292,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     );
                                   }
                                 } catch (e) {
-                                  print("Error: $e");
+                                  //print("Error: $e");
                                 }
                                 setState(() => showSpinner = false);
                               } else {

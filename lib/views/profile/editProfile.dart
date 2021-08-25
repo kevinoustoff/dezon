@@ -85,8 +85,8 @@ class _EditProfileState extends State<EditProfile> {
         var resp = await http.get(
           Uri.parse(ApiRoutes.host + sectionsUrls[i]),
         );
-        print("Response Status code: ${resp.statusCode}");
-        print("Response body: ${resp.body}");
+        /* print("Response Status code: ${resp.statusCode}");
+        print("Response body: ${resp.body}"); */
         if (resp.statusCode.toString().startsWith('20')) {
           response['ok'] += 1;
           response[sectionsTitles[i]] = jsonDecode(resp.body);

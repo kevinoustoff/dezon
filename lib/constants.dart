@@ -104,6 +104,12 @@ String validatePassword(String s) {
 
 const String noConnectionText =
     "Connexion internet faible ou inexistante. Assurez vous d'avoir une bonne liaison internet et réessayez !";
+printGetStart(String whatWeGettin) =>
+    print("->GET " + whatWeGettin + " in progress");
+printGetDone(String whatWeGettin) =>
+    print("->GET " + whatWeGettin + " done ! 💪");
+printGetFailed(String whatWeGettin) =>
+    print("->GET " + whatWeGettin + " failed ! ❌❌");
 fullHeight(BuildContext context) => MediaQuery.of(context).size.height;
 fullWidth(BuildContext context) => MediaQuery.of(context).size.width;
 
@@ -123,6 +129,7 @@ class ApiRoutes {
   static const fetchSearchFilters =
       "index.php/wp-json/api/services/search/filters";
   static const topServices = "index.php/wp-json/api/services/last";
+  static const topUsers = "index.php/wp-json/api/freelancers/top";
   static const sectionLanguesPrestataires =
       "index.php/wp-json/api/langues-prestataires";
   static const sectionSexes = "index.php/wp-json/api/sexes";

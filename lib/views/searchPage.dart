@@ -4,10 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'dart:convert';
 
-import 'filterModalContent.dart';
-import 'projectCard.dart';
-import 'serviceCard.dart';
-import 'serviceDetailsScreen.dart';
+import 'widgets/filterModalContent.dart';
+import 'widgets/projectCard.dart';
+import 'widgets/serviceCard.dart';
+import 'services/serviceDetailsScreen.dart';
 
 /* import 'package:flutter/services.dart';
 SystemChannels.textInput.invokeMethod('TextInput.hide'); */
@@ -87,11 +87,11 @@ class _SearchPageState extends State<SearchPage> {
       final http.Response response = await http.get(
         Uri.parse(ApiRoutes.host + ApiRoutes.fetchSearchFilters),
       );
-      print("Status Code: " +
+      /* print("Status Code: " +
           response.statusCode.toString() +
           '\n' +
           "Body: " +
-          "${response.body}");
+          "${response.body}"); */
       if (response.statusCode.toString().startsWith('20')) {
         ///SERVICE
         final Map bodyMap = Map.from(jsonDecode(response.body));
@@ -124,7 +124,7 @@ class _SearchPageState extends State<SearchPage> {
         }
       }
     } catch (e) {
-      print("$e");
+      //print("$e");
     }
   }
 
@@ -170,15 +170,15 @@ class _SearchPageState extends State<SearchPage> {
         }
       }
     }
-    print("L'URL EST : $url\n");
+    //print("L'URL EST : $url\n");
     final http.Response response = await http.get(
       Uri.parse(url),
     );
-    print("Status Code: " +
+    /* print("Status Code: " +
         response.statusCode.toString() +
         '\n' +
         "Body: " +
-        "${response.body}");
+        "${response.body}"); */
     if (response.statusCode.toString().startsWith('20')) {
       if (isService)
         servicesData.value = [
@@ -315,7 +315,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                 );
 
-                                print('filter MAP: ' + filterMap.toString());
+                                //print('filter MAP: ' + filterMap.toString());
                                 if (filterMap['didApply']) {
                                   selectedFilters.value =
                                       (Map.from(filterMap['isService']

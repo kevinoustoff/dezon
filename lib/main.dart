@@ -1,4 +1,4 @@
-import 'package:dezon/views/bottomBar%20modules/homePage.dart';
+import 'package:dezon/views/home/homePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dezon/constants.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
-import 'makeOfferScreen.dart';
-import 'projectDetailsScreen.dart';
+import '../projects/makeOfferScreen.dart';
+import '../projects/projectDetailsScreen.dart';
 
 class ProjectCard extends StatefulWidget {
   final int id;

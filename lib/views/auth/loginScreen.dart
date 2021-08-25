@@ -9,7 +9,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
-import '../bottomBar modules/homePage.dart';
+import '../home/homePage.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -129,13 +129,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   var resp = await http.post(
                                     uri,
                                     body: {
-                                      'email': email, //"envnews1@gmail.com",
-                                      'password': password //"91401376"
+                                      'email': email,
+                                      'password': password
                                     },
                                   );
-                                  print(
+                                  /* print(
                                       "Response Status code: ${resp.statusCode}");
-                                  print("Response body: ${resp.body}");
+                                  print("Response body: ${resp.body}"); */
                                   if (resp.statusCode
                                       .toString()
                                       .startsWith('20')) {
@@ -229,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
                                   }
                                 } catch (e) {
-                                  print("Error: $e");
+                                  //print("Error: $e");
                                 }
                                 setState(() => showSpinner = false);
                               } else {

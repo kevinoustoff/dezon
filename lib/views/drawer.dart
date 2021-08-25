@@ -1,14 +1,14 @@
-import 'package:dezon/views/identityCheckScreen.dart';
+import 'package:dezon/views/profile/identityCheckScreen.dart';
 import 'package:dezon/views/pageInProgress.dart';
-import 'package:dezon/views/reportsScreen.dart';
-import 'package:dezon/views/savedProjectsScreen.dart';
-import 'package:dezon/views/settingsScreen.dart';
+import 'package:dezon/views/profile/reportsScreen.dart';
+import 'package:dezon/views/profile/savedProjectsScreen.dart';
+import 'package:dezon/views/profile/settingsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import 'auth/loginScreen.dart';
-import 'userProfile.dart';
+import 'profile/userProfile.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -34,6 +34,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               MaterialPageRoute(
                 builder: (context) => UserProfile(
                   id: id,
+                  canEdit: true,
                 ),
               ),
             );
@@ -124,6 +125,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     MaterialPageRoute(
                                       builder: (context) => UserProfile(
                                         id: userId.value,
+                                        canEdit: true,
                                       ),
                                     ),
                                   );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import 'serviceDetailsScreen.dart';
+import '../../constants.dart';
+import '../services/serviceDetailsScreen.dart';
 
 class ServiceCard extends StatefulWidget {
   final int id;

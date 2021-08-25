@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants.dart';
+import '../../constants.dart';
 import 'package:http/http.dart' as http;
 
 class ModifyPassword extends StatefulWidget {
@@ -111,9 +111,9 @@ class _ModifyPasswordState extends State<ModifyPassword> {
                                         "confirm_password": newPassword,
                                       },
                                     );
-                                    print(
+                                    /* print(
                                         "Response Status code: ${resp.statusCode}");
-                                    print("Response body: ${resp.body}");
+                                    print("Response body: ${resp.body}"); */
                                     if (resp.statusCode
                                         .toString()
                                         .startsWith('20')) {
@@ -160,7 +160,7 @@ class _ModifyPasswordState extends State<ModifyPassword> {
                                     );
                                   }
                                 } catch (e) {
-                                  print("Error: $e");
+                                  //print("Error: $e");
                                 }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
