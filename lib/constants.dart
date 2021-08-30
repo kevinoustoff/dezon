@@ -94,10 +94,17 @@ String validateNom(String s) {
 
 String validatePassword(String s) {
   if (s == null || s.isEmpty) {
-    return "Entrer un mot de passe!";
+    return "Entrez un mot de passe!";
   }
   if (s.length < 8) {
     return "Au moins 8 caractères requis";
+  }
+  return null;
+}
+
+String validateResetKey(String s) {
+  if (s == null || s.isEmpty) {
+    return "Entrez le code!";
   }
   return null;
 }
@@ -116,7 +123,9 @@ fullWidth(BuildContext context) => MediaQuery.of(context).size.width;
 class ApiRoutes {
   static const String host = "https://dezon.app/";
   static const String termsAndConditions = "index.php/terms-and-conditions/";
-  static const forgotPassword = "";
+  static const forgotPassword = "index.php/wp-json/api/forgot-password";
+  static const forgotPasswordSetNew =
+      "index.php/wp-json/api/forgot-password/set-new";
   static const modifyPass = "index.php/wp-json/api/recover-password";
   static const login = "index.php/wp-json/api/login";
   static const register = "index.php/wp-json/api/register";

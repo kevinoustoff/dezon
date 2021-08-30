@@ -114,6 +114,10 @@ class _HomeContentState extends State<HomeContent> {
                       if (snapshot.connectionState == ConnectionState.done &&
                           snapshot.hasData) {
                         final List<Map> listTopServices = snapshot.data;
+                        double dWidth = fullWidth(context) * 0.81;
+                        if (listTopServices.length == 1) {
+                          dWidth = fullWidth(context) * 0.92;
+                        }
                         return SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -125,7 +129,7 @@ class _HomeContentState extends State<HomeContent> {
                                           : listTopServices.length);
                                   i++)
                                 Container(
-                                  width: fullWidth(context) * 0.81,
+                                  width: dWidth,
                                   child: ServiceCard(
                                     id: listTopServices[i]['id'],
                                     image: listTopServices[i]['image'],

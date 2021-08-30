@@ -14,9 +14,11 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   bool showSpinner = false;
-  final _formKey = GlobalKey<FormState>();
-  String email;
-  bool emailSent = false;
+  final _formKey1 = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
+  String email, resetKey, password;
+  int userId;
+  bool emailSent = false, resetDone = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +37,128 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           builder: (context) => SingleChildScrollView(
             padding: EdgeInsets.all(15),
             child: emailSent
-                ? Column(
-                    children: [
-                      SizedBox(height: 35),
-                      Text(
-                        "Un email vous a été envoyé. Suivez les instructions pour réinitialiser votre mot de passe.",
-                        style: TextStyle(fontSize: 17),
+                ? (!resetDone
+                    ? Form(
+                        key: _formKey2,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Text(
+                              "Un code vous a été envoyé par email. Entrez le suivi de votre nouveau mot de passe pour terminer la réinitialisation.",
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            SizedBox(height: 15),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Code",
+                              ),
+                              validator: validateResetKey,
+                              onSaved: (newValue) {
+                                setState(() {
+                                  resetKey = newValue;
+                                });
+                              },
+                            ),
+                            SizedBox(height: 25),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Nouveau mot de passe",
+                              ),
+                              validator: validatePassword,
+                              onSaved: (newValue) {
+                                setState(() {
+                                  password = newValue;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                kPrimaryColor)),
+                                    onPressed: () async {
+                                      if (_formKey2.currentState.validate()) {
+                                        _formKey2.currentState.save();
+                                        if (await DataConnectionChecker()
+                                            .hasConnection) {
+                                          setState(() => showSpinner = true);
+                                          try {
+                                            var uri = Uri.parse(ApiRoutes.host +
+                                                ApiRoutes.forgotPasswordSetNew);
+                                            var resp = await http.post(
+                                              uri,
+                                              body: {
+                                                "user_id": userId.toString(),
+                                                "reset_key": resetKey,
+                                                "password": password
+                                              },
+                                            );
+                                            print(
+                                                "Response Status code: ${resp.statusCode}");
+                                            print(
+                                                "Response body: ${resp.body}");
+                                            if (resp.statusCode
+                                                .toString()
+                                                .startsWith('20')) {
+                                              setState(() {
+                                                resetDone = true;
+                                              });
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    "Erreur survenue sur le serveur !",
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          } catch (e) {
+                                            print("Error: $e");
+                                          }
+                                          setState(() => showSpinner = false);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                "Connexion internet faible ou inexistante. Assurez vous d'avoir une bonne liaison internet et réessayez !",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                    child: Text(
+                                      "Terminer la réinitialisation",
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       )
-                    ],
-                  )
+                    : Column(
+                        children: [
+                          SizedBox(height: 15),
+                          Text(
+                            "Réinitialisation terminée avec succès.\n✅",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ],
+                      ))
                 : Form(
-                    key: _formKey,
+                    key: _formKey1,
                     child: Column(
                       children: [
                         SizedBox(height: 25),
@@ -76,43 +189,34 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     backgroundColor: MaterialStateProperty.all(
                                         kPrimaryColor)),
                                 onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
+                                  if (_formKey1.currentState.validate()) {
+                                    _formKey1.currentState.save();
                                     if (await DataConnectionChecker()
                                         .hasConnection) {
                                       setState(() => showSpinner = true);
                                       try {
+                                        print("URL: " +
+                                            ApiRoutes.host +
+                                            ApiRoutes.forgotPassword);
                                         var uri = Uri.parse(ApiRoutes.host +
                                             ApiRoutes.forgotPassword);
+                                        print("EMAIL :" + email);
                                         var resp = await http.post(
                                           uri,
-                                          body: {
-                                            'email': email,
-                                          },
+                                          body: {'email': email},
                                         );
                                         /* print(
-                                            "Response Status code: ${resp.statusCode}");
-                                        print("Response body: ${resp.body}"); */
+                                          "Response Status code: ${resp.statusCode}");
+                                      print("Response body: ${resp.body}"); */
                                         if (resp.statusCode
                                             .toString()
                                             .startsWith('20')) {
-                                          Map respBody =
-                                              Map.from(jsonDecode(resp.body))[
-                                                  "body_response"];
-                                          if (respBody != null) {}
-                                        } else if (resp.statusCode
-                                            .toString()
-                                            .startsWith('401')) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
+                                          setState(() {
+                                            userId =
                                                 Map.from(jsonDecode(resp.body))[
-                                                    'message'],
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          );
+                                                    "user_id"];
+                                            emailSent = true;
+                                          });
                                         } else {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
@@ -125,7 +229,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                           );
                                         }
                                       } catch (e) {
-                                        //print("Error: $e");
+                                        print("Error: $e");
                                       }
                                       setState(() => showSpinner = false);
                                     } else {
