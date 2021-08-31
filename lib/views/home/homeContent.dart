@@ -177,15 +177,15 @@ class _HomeContentState extends State<HomeContent> {
                             children: [
                               for (var i = 0; i < listTopUsers.length; i++)
                                 GestureDetector(
-                                  onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => UserProfile(
-                                        id: int.tryParse(
-                                                listTopUsers[i]['id']) ??
-                                            1,
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => UserProfile(
+                                          id: listTopUsers[i]['id'],
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                   child: Container(
                                     height: fullHeight(context) * 0.3,
                                     width: fullWidth(context) * 0.52,
