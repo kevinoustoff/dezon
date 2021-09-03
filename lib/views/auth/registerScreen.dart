@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 import '../home/homePage.dart';
-import 'loginScreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -18,18 +17,40 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  String email;
-  String password;
-  String identifiant;
-  String nom;
-
+  String email, password, identifiant, nom;
   bool showSpinner = false;
-  bool showPassword = false;
+  ValueNotifier<bool> obscurePass = ValueNotifier(true);
+
+  persistData(http.Response resp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map respBody = Map.from(jsonDecode(resp.body))["body_response"];
+    prefs.setInt('ID', respBody['ID']);
+    prefs.setBool('caps_subscriber', Map.from(respBody['caps'])['subscriber']);
+    prefs.setString('cap_key', respBody['cap_key']);
+    prefs.setStringList('roles', [
+      for (var i = 0; i < respBody['roles'].length; i++)
+        "${respBody['roles'][i]}"
+    ]);
+    prefs.setBool('allcaps_read', Map.from(respBody['allcaps'])['read']);
+    prefs.setBool('allcaps_level_0', Map.from(respBody['allcaps'])['level_0']);
+    prefs.setBool(
+        'allcaps_subscriber', Map.from(respBody['allcaps'])['subscriber']);
+    prefs.setString('user_login', Map.from(respBody['data'])['user_login']);
+    prefs.setString('user_pass', Map.from(respBody['data'])['user_pass']);
+    prefs.setString(
+        'user_nicename', Map.from(respBody['data'])['user_nicename']);
+    prefs.setString('user_email', Map.from(respBody['data'])['user_email']);
+    prefs.setString(
+        'user_registered', Map.from(respBody['data'])['user_registered']);
+    prefs.setString('user_status', Map.from(respBody['data'])['user_status']);
+    prefs.setString('display_name', Map.from(respBody['data'])['display_name']);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Image.asset(
           AppAssets.appIcon,
@@ -117,24 +138,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   SizedBox(height: 15),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      hintText: "Mot de passe",
-                      prefixIcon: Icon(Icons.security_rounded),
-                    ),
-                    validator: validatePassword,
-                    onSaved: (newValue) {
-                      setState(() {
-                        password = newValue;
-                      });
-                    },
-                  ),
+                  ValueListenableBuilder(
+                      valueListenable: obscurePass,
+                      builder: (context, obscureV, _) {
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            hintText: "Mot de passe",
+                            prefixIcon: Icon(Icons.security_rounded),
+                            suffixIcon: IconButton(
+                              onPressed: () =>
+                                  obscurePass.value = !obscurePass.value,
+                              icon: Icon(
+                                obscureV
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                            ),
+                          ),
+                          validator: validatePassword,
+                          obscureText: obscureV,
+                          onSaved: (newValue) {
+                            setState(() {
+                              password = newValue;
+                            });
+                          },
+                        );
+                      }),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: GestureDetector(
@@ -200,92 +235,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   if (resp.statusCode
                                       .toString()
                                       .startsWith('20')) {
-                                    SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    Map respBody = Map.from(
-                                        jsonDecode(resp.body))["body_response"];
-                                    prefs.setInt('ID', respBody['ID']);
-                                    prefs.setBool(
-                                        'caps_subscriber',
-                                        Map.from(
-                                            respBody['caps'])['subscriber']);
-                                    prefs.setString(
-                                        'cap_key', respBody['cap_key']);
-                                    prefs.setStringList('roles', [
-                                      for (var i = 0;
-                                          i < respBody['roles'].length;
-                                          i++)
-                                        "${respBody['roles'][i]}"
-                                    ]);
-                                    prefs.setBool('allcaps_read',
-                                        Map.from(respBody['allcaps'])['read']);
-                                    prefs.setBool(
-                                        'allcaps_level_0',
-                                        Map.from(
-                                            respBody['allcaps'])['level_0']);
-                                    prefs.setBool(
-                                        'allcaps_subscriber',
-                                        Map.from(
-                                            respBody['allcaps'])['subscriber']);
-                                    prefs.setString(
-                                        'user_login',
-                                        Map.from(
-                                            respBody['data'])['user_login']);
-                                    prefs.setString(
-                                        'user_pass',
-                                        Map.from(
-                                            respBody['data'])['user_pass']);
-                                    prefs.setString(
-                                        'user_nicename',
-                                        Map.from(
-                                            respBody['data'])['user_nicename']);
-                                    prefs.setString(
-                                        'user_email',
-                                        Map.from(
-                                            respBody['data'])['user_email']);
-                                    prefs.setString(
-                                        'user_registered',
-                                        Map.from(respBody['data'])[
-                                            'user_registered']);
-                                    prefs.setString(
-                                        'user_status',
-                                        Map.from(
-                                            respBody['data'])['user_status']);
-                                    prefs.setString(
-                                        'display_name',
-                                        Map.from(
-                                            respBody['data'])['display_name']);
-                                    Navigator.pushReplacement(
+                                    ///PERSIST DATA
+                                    ///
+                                    persistData(resp);
+
+                                    ///
+                                    ///
+                                    Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HomePage(),
-                                      ),
-                                    );
-                                  } else if (resp.statusCode
-                                      .toString()
-                                      .startsWith('401')) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          Map.from(
-                                              jsonDecode(resp.body))['message'],
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
+                                          builder: (context) => HomePage()),
+                                      (Route<dynamic> route) => false,
                                     );
                                   } else {
-                                    String message;
-                                    try {
-                                      message = Map.from(
-                                          jsonDecode(resp.body))['message'];
-                                    } catch (e) {
-                                      message =
-                                          "Erreur survenue sur le serveur !";
-                                    }
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          message,
+                                          Map.from(jsonDecode(resp.body))[
+                                                  'message'] ??
+                                              "Erreur survenue sur le serveur !",
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -321,12 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
+                        Navigator.pop(context);
                       },
                       child: RichText(
                         textAlign: TextAlign.center,

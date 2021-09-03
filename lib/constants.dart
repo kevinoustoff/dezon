@@ -110,7 +110,7 @@ String validateResetKey(String s) {
 }
 
 const String noConnectionText =
-    "Connexion internet faible ou inexistante. Assurez vous d'avoir une bonne liaison internet et réessayez !";
+    "Connexion internet faible.\n\nAssurez vous d'avoir une bonne liaison internet et réessayez !\n";
 printGetStart(String whatWeGettin) =>
     print("->GET " + whatWeGettin + " in progress");
 printGetDone(String whatWeGettin) =>

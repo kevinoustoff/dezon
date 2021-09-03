@@ -36,9 +36,21 @@ class _MyAppState extends State<MyApp> {
         title: 'Dezon',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            primaryColor: kPrimaryColor,
-            scaffoldBackgroundColor: Colors.white,
-            fontFamily: "Poppins"),
+          primaryColor: kPrimaryColor,
+          scaffoldBackgroundColor: Colors.white,
+          fontFamily: "Poppins",
+          appBarTheme: AppBarTheme(
+            backwardsCompatibility: false,
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            backgroundColor: kPrimaryColor,
+          ),
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            },
+          ),
+        ),
         initialRoute: '/',
         routes: {
           '/': (context) => FutureBuilder(
