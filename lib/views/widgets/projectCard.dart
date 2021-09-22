@@ -139,39 +139,48 @@ class _ProjectCardState extends State<ProjectCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Text(
-                        (widget.projectExpiry ?? ''),
-                        style: TextStyle(fontSize: 15),
+                  Flexible(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          (widget.projectExpiry ?? ''),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15),
+                        ),
                       ),
                     ),
                   ),
                   Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Text(
-                        (widget.offres ?? '0') + ' offres reçues',
-                        style: TextStyle(fontSize: 15),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          (widget.offres ?? '0') + ' offres reçues',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 15),
+                        ),
                       ),
                     ),
                   ),
                   if (widget.location != null)
                     Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Position:'),
-                            Text(
-                              widget.location,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
-                              style: TextStyle(fontSize: 15),
-                            ),
-                          ],
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Column(
+                            //crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Position:'),
+                              Text(
+                                widget.location,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

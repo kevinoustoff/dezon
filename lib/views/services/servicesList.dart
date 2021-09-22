@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dezon/views/widgets/pagination_bubble.dart';
 import 'package:dezon/views/widgets/serviceCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +26,7 @@ class _ServicesListState extends State<ServicesList> {
 
     if (response.statusCode.toString().startsWith('20')) {
       printGetDone(whatWeGettin);
+      print(jsonDecode(response.body).toString());
       return [
         for (var i = 0; i < jsonDecode(response.body).length; i++)
           Map.from(jsonDecode(response.body)[i])
@@ -49,8 +51,32 @@ class _ServicesListState extends State<ServicesList> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Icon(
+                        Icons.arrow_back_ios_outlined,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                    for (var i = 0; i < 4; i++)
+                      PaginationBubble(
+                        isActive: i == 0,
+                        number: i + 1,
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
                 TextButton.icon(
                   onPressed: () {},
                   icon: Icon(Icons.sort),
