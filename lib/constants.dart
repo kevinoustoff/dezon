@@ -133,6 +133,8 @@ class ApiRoutes {
   static const searchServices = "index.php/wp-json/api/services/search/?title=";
   static const searchProjects = "index.php/wp-json/api/projets/search/?title=";
   static const fetchProjects = "index.php/wp-json/api/projets";
+  static const toSaveProjects = "index.php/wp-json/api/projets/save";
+  static const savedProjects = "index.php/wp-json/api/projets/saved?user_id=";
   static const fetchProjectById = "index.php/wp-json/api/projet/?id=";
   static const fetchServiceById = "index.php/wp-json/api/service/?id=";
   static const fetchSearchFilters =

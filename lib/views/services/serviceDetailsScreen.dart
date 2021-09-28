@@ -1,3 +1,4 @@
+import 'package:dezon/views/profile/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_html_css/simple_html_css.dart';
@@ -14,6 +15,7 @@ class ServiceDetailsScreen extends StatefulWidget {
 
 class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
   Future<Map> futureServiceData;
+  List selectedAdds = [];
 
   @override
   void initState() {
@@ -27,11 +29,11 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
         ApiRoutes.host + ApiRoutes.fetchServiceById + widget.id,
       ),
     );
-    /* print("Status Code: " +
+    print("Status Code: " +
         response.statusCode.toString() +
         '\n' +
         "Body: " +
-        "${response.body}"); */
+        "${response.body}");
 
     if (response.statusCode.toString().startsWith('20')) {
       return Map.from(jsonDecode(response.body));
@@ -69,6 +71,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
             if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData) {
               final Map serviceMap = snapshot.data;
+              final List addServices = snapshot.data['addonsServices'];
               return Column(
                 children: [
                   Container(
@@ -161,7 +164,7 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                       ' h';
                                 }
                                 return Text(
-                                  dPrice,
+                                  dPrice + 'FCFA',
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 3,
@@ -175,39 +178,76 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                             )
                           ],
                         ),
-                        SizedBox(height: 10),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              radius: 20,
-                              backgroundImage: Image.network(
-                                serviceMap["freelance-photo-profile"],
-                                height: fullHeight(context) * 0.13,
-                                width: double.infinity,
-                                fit: BoxFit.fitWidth,
-                              ).image,
-                            ),
-                            SizedBox(width: 10),
-                            Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 4.0),
-                                child: Text(
-                                  serviceMap['freelancer-name'] ?? '',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 16),
+                        Divider(),
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: 30,
+                            backgroundImage: Image.network(
+                              serviceMap["freelance-photo-profile"],
+                              height: fullHeight(context) * 0.13,
+                              width: double.infinity,
+                              fit: BoxFit.fitWidth,
+                            ).image,
+                          ),
+                          title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 20,
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Text(
+                                    serviceMap['freelancer-name'] ?? '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
                               ),
+                            ],
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow.shade800,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  '3',
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                          trailing: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.red),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => UserProfile(
+                                    id: 1,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text('Voir le profil'),
+                          ),
                         ),
-                        SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text("Togo, membre depuis ..."),
+                        ),
+                        Divider(),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Text(
@@ -225,6 +265,77 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                                 context, serviceMap["description"] ?? ''),
                           ),
                         ),
+                        SizedBox(height: 20),
+                        if (addServices != null)
+                          Builder(builder: (context) {
+                            return Column(
+                              //crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Divider(thickness: 1),
+                                for (var i = 0; i < addServices.length; i++)
+                                  CheckboxListTile(
+                                    value: selectedAdds.contains(i),
+                                    onChanged: (value) => setState(() =>
+                                        (selectedAdds.contains(i)
+                                            ? selectedAdds.remove(i)
+                                            : selectedAdds.add(i))),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    title: Text(
+                                      addServices[i]['title'] ?? '',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          (addServices[i]['price'] ?? '') +
+                                              ' FCFA',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        Text(
+                                          addServices[i]['content'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.red),
+                                          ),
+                                          onPressed: () {},
+                                          child: Text(
+                                            "Inclure ces services",
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Divider(thickness: 1),
+                              ],
+                            );
+                          }),
                         SizedBox(height: 100),
                       ],
                     ),

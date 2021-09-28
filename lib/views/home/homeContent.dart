@@ -187,9 +187,10 @@ class _HomeContentState extends State<HomeContent> {
                                     );
                                   },
                                   child: Container(
-                                    height: fullHeight(context) * 0.3,
-                                    width: fullWidth(context) * 0.52,
+                                    height: fullHeight(context) * 0.425,
+                                    width: fullWidth(context) * 0.54,
                                     child: UserCard(
+                                      id: listTopUsers[i]['id'],
                                       userPhoto: listTopUsers[i]
                                           ['freelance-photo-profile'],
                                       userName: listTopUsers[i]

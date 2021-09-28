@@ -3,7 +3,6 @@ import 'package:dezon/views/chat/chatListScreen.dart';
 import 'package:dezon/views/projects/projectsList.dart';
 import 'package:dezon/views/services/servicesList.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import '../drawer.dart';
 import '../searchPage.dart';
@@ -22,7 +21,7 @@ const List<IconData> menuIcons = [
   Icons.chat_bubble_outline_rounded,
 ];
 
-final List<Widget> menuPages = [
+List<Widget> _widgetOptions = <Widget>[
   HomeContent(),
   ServicesList(),
   ProjectsList(),
@@ -36,7 +35,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  bool showSpinner = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -68,19 +66,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: CustomDrawer(),
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        color: Colors.brown,
-        dismissible: true,
-        progressIndicator: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-        ),
-        child: Builder(
-          builder: (context) {
-            return menuPages[_selectedIndex];
-          },
-        ),
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 6,

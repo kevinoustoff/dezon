@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dezon/views/profile/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:dezon/constants.dart';
@@ -28,6 +29,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         ApiRoutes.host + ApiRoutes.fetchProjectById + widget.id,
       ),
     );
+
+    print("Status Code: " +
+        response.statusCode.toString() +
+        '\n' +
+        "Body: " +
+        "${response.body}");
 
     if (response.statusCode.toString().startsWith('20')) {
       printGetDone(whatWeGettin);
@@ -68,12 +75,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 15),
                             child: Text("Publié le " +
                                 (respBody["publish-date"] ?? '')),
                           ),
@@ -165,37 +172,58 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           ),
                           Text(respBody["project_expiry"] ?? ''),
                           SizedBox(height: 8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              /* CircleAvatar(
-                                backgroundColor: Colors.grey,
-                                radius: 15,
-                                backgroundImage: Image.network(
-                                  respBody["freelance-photo-profile"],
-                                  height: fullHeight(context) * 0.13,
-                                  width: double.infinity,
-                                  fit: BoxFit.fitWidth,
-                                ).image,
-                              ), */
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                                size: 20,
-                              ),
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: Text(
-                                    respBody["employer_name"] ?? '',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 16),
+                          Divider(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => UserProfile(
+                                    id: 1,
                                   ),
                                 ),
-                              ),
-                            ],
+                              );
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                /* CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  radius: 15,
+                                  backgroundImage: Image.network(
+                                    respBody["freelance-photo-profile"],
+                                    height: fullHeight(context) * 0.13,
+                                    width: double.infinity,
+                                    fit: BoxFit.fitWidth,
+                                  ).image,
+                                ), */
+                                //SizedBox(width: 10),
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 20,
+                                ),
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 4.0),
+                                    child: Text(
+                                      respBody["employer_name"] ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "Togo, 0 projets finalisés, Email verifié.\n Paiement par .....",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          Divider(),
                           ExpansionTile(
                             tilePadding: EdgeInsets.all(0),
                             iconColor: Colors.black,

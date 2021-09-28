@@ -40,7 +40,6 @@ class _MyAppState extends State<MyApp> {
           scaffoldBackgroundColor: Colors.white,
           fontFamily: "Poppins",
           appBarTheme: AppBarTheme(
-            backwardsCompatibility: false,
             systemOverlayStyle: SystemUiOverlayStyle.light,
             backgroundColor: kPrimaryColor,
           ),

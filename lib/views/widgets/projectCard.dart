@@ -1,11 +1,15 @@
+import 'package:dezon/constants.dart';
+import 'package:dezon/views/profile/userProfile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
 import '../projects/makeOfferScreen.dart';
 import '../projects/projectDetailsScreen.dart';
+import 'package:http/http.dart' as http;
 
 class ProjectCard extends StatefulWidget {
-  final int id;
+  final int id, freelancerId;
   final String estimatedHours,
       hourlyPrice,
       cost,
@@ -27,6 +31,7 @@ class ProjectCard extends StatefulWidget {
     @required this.employerName,
     @required this.duration,
     @required this.level,
+    @required this.freelancerId,
     @required this.freelancerType,
     @required this.projectExpiry,
     @required this.title,
@@ -68,6 +73,52 @@ class _ProjectCardState extends State<ProjectCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => UserProfile(
+                          id: widget.freelancerId,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /* CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: 15,
+                        backgroundImage:
+                            (![null, ""].contains(widget.freelancerPhoto))
+                                ? NetworkImage(widget.freelancerPhoto)
+                                : AssetImage(AppAssets.defaultProfile),
+                      ), */
+                      SizedBox(width: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                            size: 20,
+                          ),
+                          SizedBox(width: 8),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Text(
+                              widget.employerName ?? "",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -192,9 +243,63 @@ class _ProjectCardState extends State<ProjectCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Icon(
-                    Icons.share_outlined,
-                    color: Colors.green.shade800,
+                  PopupMenuButton(
+                    icon: Icon(Icons.share_outlined),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Text("Enregistrer"),
+                        value: 1,
+                      ),
+                    ],
+                    onSelected: (value) async {
+                      try {
+                        final response = await http.post(
+                          Uri.parse(ApiRoutes.host + ApiRoutes.toSaveProjects),
+                          body: {
+                            "user_id": ((await SharedPreferences.getInstance())
+                                    .getInt('ID'))
+                                .toString(),
+                            "project_id": widget.id.toString()
+                          },
+                        );
+                        print("Status Code: " +
+                            response.statusCode.toString() +
+                            '\n' +
+                            "Body: " +
+                            "${response.body.toString()}");
+
+                        if (response.statusCode.toString().startsWith('20')) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Projet enregistré.",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Enregistrement échoué.",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                          throw Exception('Failed to save project');
+                        }
+                      } catch (e) {
+                        print(e);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "L'application a rencontré une erreur. Veuillez réessayer plus tard !",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                   GestureDetector(
                     onTap: () => setState(() => hasLike = !hasLike),

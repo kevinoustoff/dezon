@@ -1,6 +1,8 @@
+import 'package:dezon/views/profile/userProfile.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
+  final int id;
   final String userPhoto,
       userName,
       userTagLine,
@@ -9,6 +11,7 @@ class UserCard extends StatelessWidget {
       userRegistrationDate;
   final List userSkills;
   UserCard({
+    @required this.id,
     @required this.userPhoto,
     @required this.userName,
     @required this.userTagLine,
@@ -67,6 +70,19 @@ class UserCard extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 5),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Text(
+                  "< $userDescription >",
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -81,6 +97,32 @@ class UserCard extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 5),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Text(
+                  "Membre depuis " + userRegistrationDate,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UserProfile(
+                        id: id,
+                      ),
+                    ),
+                  );
+                },
+                child: Text("Voir le profil")),
           ],
         ),
       ),

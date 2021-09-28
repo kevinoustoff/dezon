@@ -24,6 +24,11 @@ class _ProjectsListState extends State<ProjectsList> {
         ApiRoutes.host + ApiRoutes.fetchProjects,
       ),
     );
+    print("Status Code: " +
+        response.statusCode.toString() +
+        '\n' +
+        "Body: " +
+        "${response.body}");
 
     if (response.statusCode.toString().startsWith('20')) {
       printGetDone(whatWeGettin);

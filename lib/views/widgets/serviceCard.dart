@@ -1,10 +1,11 @@
+import 'package:dezon/views/profile/userProfile.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../services/serviceDetailsScreen.dart';
 
 class ServiceCard extends StatefulWidget {
-  final int id;
+  final int id, freelancerId;
   final String image,
       title,
       freelancerName,
@@ -16,6 +17,7 @@ class ServiceCard extends StatefulWidget {
     @required this.id,
     @required this.image,
     @required this.title,
+    @required this.freelancerId,
     @required this.freelancerName,
     @required this.freelancerPhoto,
     @required this.price,
@@ -65,36 +67,61 @@ class _ServiceCardState extends State<ServiceCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => UserProfile(
+                              id: widget.freelancerId,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: 15,
+                            backgroundImage:
+                                (![null, ""].contains(widget.freelancerPhoto))
+                                    ? NetworkImage(widget.freelancerPhoto)
+                                    : AssetImage(AppAssets.defaultProfile),
+                          ),
+                          SizedBox(width: 8),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: 20,
+                              ),
+                              SizedBox(width: 8),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: Text(
+                                  widget.freelancerName ?? "",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  /* Padding(
                     padding: const EdgeInsets.only(bottom: 5, top: 5),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          radius: 15,
-                          backgroundImage:
-                              (![null, ""].contains(widget.freelancerPhoto))
-                                  ? NetworkImage(widget.freelancerPhoto)
-                                  : AssetImage(AppAssets.defaultProfile),
-                        ),
                         SizedBox(width: 10),
-                        Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 20,
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
-                              widget.freelancerName ?? "",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
+                        
                       ],
                     ),
-                  ),
+                  ), */
                   Row(
                     children: [
                       Flexible(
@@ -151,16 +178,17 @@ class _ServiceCardState extends State<ServiceCard> {
                       ],
                     ),
                   ),
-                  if ((widget.queued != null) &&
-                      ((widget.queued.toString().split(' ')[0] != '0')))
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: Text(
-                        ((widget.queued.toString().split(' ')[0]) +
-                            " en attente"),
-                        style: TextStyle(fontSize: 15, color: Colors.black87),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(
+                      (((widget.queued != null) &&
+                              ((widget.queued.toString().split(' ')[0] != '0')))
+                          ? ((widget.queued.toString().split(' ')[0]) +
+                              " en attente")
+                          : ''),
+                      style: TextStyle(fontSize: 15, color: Colors.black87),
                     ),
+                  ),
                 ],
               ),
             ),

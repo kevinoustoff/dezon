@@ -1,7 +1,6 @@
 import 'package:dezon/views/profile/identityCheckScreen.dart';
 import 'package:dezon/views/pageInProgress.dart';
 import 'package:dezon/views/profile/reportsScreen.dart';
-import 'package:dezon/views/profile/savedProjectsScreen.dart';
 import 'package:dezon/views/profile/settingsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 import 'auth/loginScreen.dart';
 import 'profile/userProfile.dart';
+import 'projects/savedProjects.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -249,13 +249,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             buildMenuItem(
                               text: 'Enregistrés',
                               icon: Icons.bookmark_outline,
-                              onClicked: () {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => SavedProjectsScreen(),
-                                  ),
-                                );
+                              onClicked: () async {
+                                final mUserId =
+                                    (await SharedPreferences.getInstance())
+                                        .getInt('ID');
+                                if (mUserId != null) {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SavedProjects(
+                                        userId: mUserId.toString(),
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
                             ),
                             buildMenuItem(
