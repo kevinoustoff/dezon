@@ -166,7 +166,7 @@ class _ProjectCardState extends State<ProjectCard> {
               ),
               if (widget.savedSkills != null)
                 Wrap(
-                  spacing: 10,
+                  spacing: 0,
                   runSpacing: 0,
                   children: [
                     for (var i = 0; i < widget.savedSkills.length; i++)
@@ -175,17 +175,25 @@ class _ProjectCardState extends State<ProjectCard> {
                         label: Text(
                           widget.savedSkills[i]['name'],
                         ),
+                        padding: EdgeInsets.all(2),
                       ),
                   ],
                 ),
-              RichText(
-                text: HTML.toTextSpan(
-                  context,
-                  widget.description ?? '',
-                ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
+              if (![null, ' ', ''].contains(widget.description))
+                Builder(builder: (context) {
+                  String finalValue = widget.description;
+                  while (finalValue.startsWith("<p><\/p>")) {
+                    finalValue = finalValue.replaceFirst("<p><\/p>", '');
+                  }
+                  return RichText(
+                    text: HTML.toTextSpan(
+                      context,
+                      finalValue ?? '',
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  );
+                }),
               Divider(thickness: 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -197,7 +205,7 @@ class _ProjectCardState extends State<ProjectCard> {
                         child: Text(
                           (widget.projectExpiry ?? ''),
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15),
+                          //style: TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
@@ -209,7 +217,7 @@ class _ProjectCardState extends State<ProjectCard> {
                         child: Text(
                           (widget.offres ?? '0') + ' offres reçues',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15),
+                          //style: TextStyle(fontSize: 15),
                         ),
                       ),
                     ),
@@ -228,7 +236,7 @@ class _ProjectCardState extends State<ProjectCard> {
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
-                                style: TextStyle(fontSize: 15),
+                                //style: TextStyle(fontSize: 15),
                               ),
                             ],
                           ),
@@ -238,13 +246,13 @@ class _ProjectCardState extends State<ProjectCard> {
                 ],
               ),
               Divider(thickness: 1),
-              SizedBox(height: 8),
+              SizedBox(height: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   PopupMenuButton(
-                    icon: Icon(Icons.share_outlined),
+                    child: Icon(Icons.share_outlined),
                     itemBuilder: (context) => [
                       PopupMenuItem(
                         child: Text("Enregistrer"),

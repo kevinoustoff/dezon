@@ -131,6 +131,8 @@ class _HomeContentState extends State<HomeContent> {
                                 Container(
                                   width: dWidth,
                                   child: ServiceCard(
+                                    freelancerId: listTopServices[i]
+                                        ['author_id'],
                                     id: listTopServices[i]['id'],
                                     image: listTopServices[i]['image'],
                                     title: listTopServices[i]['title'],

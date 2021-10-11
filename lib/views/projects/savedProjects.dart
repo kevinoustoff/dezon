@@ -60,7 +60,7 @@ class _SavedProjectsState extends State<SavedProjects> {
               snapshot.hasData) {
             final respBody = snapshot.data;
             return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(15, 15, 15, 30),
+              padding: EdgeInsets.fromLTRB(10, 15, 10, 30),
               child: Container(
                 height: fullHeight(context),
                 width: fullWidth(context),
@@ -73,7 +73,7 @@ class _SavedProjectsState extends State<SavedProjects> {
                         child: Card(
                           elevation: 1.5,
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 15, 20, 25),
+                            padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,8 +87,9 @@ class _SavedProjectsState extends State<SavedProjects> {
                                     children: [
                                       Text(
                                         respBody[i]['title'],
+                                        maxLines: 2,
                                         style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -96,15 +97,17 @@ class _SavedProjectsState extends State<SavedProjects> {
                                         "Niveau : " +
                                             (respBody[i]['level']['name'] ??
                                                 ' '),
+                                        maxLines: 2,
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                         ),
                                       ),
                                       Text(
                                         "Catégorie : " +
                                             respBody[i]['category'],
+                                        maxLines: 2,
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                         ),
                                       ),
                                       Text(

@@ -346,6 +346,8 @@ class _SearchPageState extends State<SearchPage> {
                                             ),
                                           ),
                                           child: ServiceCard(
+                                            freelancerId: respBody[i]
+                                                ['author_id'],
                                             id: respBody[i]['id'],
                                             image: respBody[i]['image'],
                                             title: respBody[i]['title'],
@@ -394,6 +396,8 @@ class _SearchPageState extends State<SearchPage> {
                                     children: [
                                       for (var i = 0; i < respBody.length; i++)
                                         ProjectCard(
+                                          freelancerId: respBody[i]
+                                              ['author_id'],
                                           id: respBody[i]["id"],
                                           estimatedHours: respBody[i]
                                               ["estimated_hours"],

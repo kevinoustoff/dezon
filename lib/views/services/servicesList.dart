@@ -284,6 +284,7 @@ class _ServicesListState extends State<ServicesList> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 2.5),
                                       child: ServiceCard(
+                                        freelancerId: respBody[i]['author_id'],
                                         id: respBody[i]['id'],
                                         image: respBody[i]['image'],
                                         title: respBody[i]['title'],
