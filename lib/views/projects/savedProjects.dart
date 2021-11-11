@@ -59,11 +59,11 @@ class _SavedProjectsState extends State<SavedProjects> {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
             final respBody = snapshot.data;
-            return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(10, 15, 10, 30),
-              child: Container(
-                height: fullHeight(context),
-                width: fullWidth(context),
+            return Container(
+              height: fullHeight(context),
+              width: fullWidth(context),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(10, 15, 10, 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

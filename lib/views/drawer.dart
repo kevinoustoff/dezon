@@ -2,13 +2,18 @@ import 'package:dezon/views/profile/identityCheckScreen.dart';
 import 'package:dezon/views/pageInProgress.dart';
 import 'package:dezon/views/profile/reportsScreen.dart';
 import 'package:dezon/views/profile/settingsScreen.dart';
+import 'package:dezon/views/projects/post_project.dart';
+import 'package:dezon/views/services/post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 import 'auth/loginScreen.dart';
 import 'profile/userProfile.dart';
+import 'projects/my_projects.dart';
 import 'projects/savedProjects.dart';
+import 'services/my_services.dart';
+import 'services/saved_services.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -165,12 +170,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       buildMenuItem(
                                         text: 'Afficher',
                                         icon: Icons.visibility_outlined,
-                                        onClicked: () {
+                                        onClicked: () async {
+                                          final mUserId =
+                                              (await SharedPreferences
+                                                      .getInstance())
+                                                  .getInt('ID');
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PageInProgress(),
+                                              builder: (context) => MyProjects(
+                                                userId: mUserId,
+                                              ),
                                             ),
                                           );
                                         },
@@ -179,12 +189,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       buildMenuItem(
                                         text: 'Publier',
                                         icon: Icons.add,
-                                        onClicked: () {
+                                        onClicked: () async {
+                                          final mUserId =
+                                              (await SharedPreferences
+                                                      .getInstance())
+                                                  .getInt('ID');
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PageInProgress(),
+                                              builder: (context) => PostProject(
+                                                userId: mUserId,
+                                              ),
                                             ),
                                           );
                                         },
@@ -216,12 +231,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       buildMenuItem(
                                         text: 'Afficher',
                                         icon: Icons.visibility_outlined,
-                                        onClicked: () {
+                                        onClicked: () async {
+                                          final mUserId =
+                                              (await SharedPreferences
+                                                      .getInstance())
+                                                  .getInt('ID');
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PageInProgress(),
+                                              builder: (context) => MyServices(
+                                                userId: mUserId,
+                                              ),
                                             ),
                                           );
                                         },
@@ -230,12 +250,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       buildMenuItem(
                                         text: 'Publier',
                                         icon: Icons.add,
-                                        onClicked: () {
+                                        onClicked: () async {
+                                          final mUserId =
+                                              (await SharedPreferences
+                                                      .getInstance())
+                                                  .getInt('ID');
                                           Navigator.of(context).pop();
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  PageInProgress(),
+                                                  PostService(userId: mUserId),
                                             ),
                                           );
                                         },
@@ -246,24 +270,70 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 ),
                               ],
                             ),
-                            buildMenuItem(
-                              text: 'Enregistrés',
-                              icon: Icons.bookmark_outline,
-                              onClicked: () async {
-                                final mUserId =
-                                    (await SharedPreferences.getInstance())
-                                        .getInt('ID');
-                                if (mUserId != null) {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => SavedProjects(
-                                        userId: mUserId.toString(),
+                            ExpansionTile(
+                              leading: Icon(
+                                Icons.bookmark_outline,
+                                color: Colors.black,
+                              ),
+                              tilePadding: EdgeInsets.all(0),
+                              title: Text(
+                                'Enregistrés',
+                                style: TextStyle(
+                                  //fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 25.0),
+                                  child: Column(
+                                    children: [
+                                      buildMenuItem(
+                                        text: 'Projets',
+                                        icon: Icons.library_books_outlined,
+                                        onClicked: () async {
+                                          final mUserId =
+                                              (await SharedPreferences
+                                                      .getInstance())
+                                                  .getInt('ID');
+                                          if (mUserId != null) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SavedProjects(
+                                                  userId: mUserId.toString(),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
                                       ),
-                                    ),
-                                  );
-                                }
-                              },
+                                      buildMenuItem(
+                                        text: 'Services',
+                                        icon: Icons.work_outline,
+                                        onClicked: () async {
+                                          final mUserId =
+                                              (await SharedPreferences
+                                                      .getInstance())
+                                                  .getInt('ID');
+                                          if (mUserId != null) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SavedServices(
+                                                  userId: mUserId.toString(),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             buildMenuItem(
                               text: "Litiges",
@@ -280,13 +350,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             buildMenuItem(
                               text: "Vérification de l'identité",
                               icon: Icons.check_circle_outline,
-                              onClicked: () {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => IdentityCheckScreen(),
-                                  ),
-                                );
+                              onClicked: () async {
+                                final mUserId =
+                                    (await SharedPreferences.getInstance())
+                                        .getInt('ID');
+                                if (mUserId != null) {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => IdentityCheckScreen(
+                                        id: mUserId.toString(),
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
                             ),
                             buildMenuItem(

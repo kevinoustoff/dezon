@@ -8,15 +8,21 @@
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dezon.iml" beforeDir="false" afterPath="$PROJECT_DIR$/dezon.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/drawer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/drawer.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/projects/savedProjects.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/projects/savedProjects.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/services/serviceDetailsScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/services/serviceDetailsScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/widgets/projectCard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/widgets/projectCard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/views/widgets/serviceCard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/views/widgets/serviceCard.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@/home/koda/.android/avd/Pixel_4_API_28.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[0442025956003856]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -26,6 +32,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />

@@ -73,47 +73,34 @@ class _ProjectCardState extends State<ProjectCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => UserProfile(
-                          id: widget.freelancerId,
-                        ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UserProfile(
+                        id: widget.freelancerId,
                       ),
-                    );
-                  },
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      /* CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        radius: 15,
-                        backgroundImage:
-                            (![null, ""].contains(widget.freelancerPhoto))
-                                ? NetworkImage(widget.freelancerPhoto)
-                                : AssetImage(AppAssets.defaultProfile),
-                      ), */
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20,
+                      ),
                       SizedBox(width: 8),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Text(
-                              widget.employerName ?? "",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Text(
+                          widget.employerName ?? "",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
@@ -251,15 +238,12 @@ class _ProjectCardState extends State<ProjectCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  PopupMenuButton(
+                  GestureDetector(
+                    onTap: () {},
                     child: Icon(Icons.share_outlined),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: Text("Enregistrer"),
-                        value: 1,
-                      ),
-                    ],
-                    onSelected: (value) async {
+                  ),
+                  GestureDetector(
+                    onTap: () async {
                       try {
                         final response = await http.post(
                           Uri.parse(ApiRoutes.host + ApiRoutes.toSaveProjects),
@@ -285,6 +269,7 @@ class _ProjectCardState extends State<ProjectCard> {
                               ),
                             ),
                           );
+                          setState(() => hasLike = !hasLike);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -308,9 +293,6 @@ class _ProjectCardState extends State<ProjectCard> {
                         );
                       }
                     },
-                  ),
-                  GestureDetector(
-                    onTap: () => setState(() => hasLike = !hasLike),
                     child: Icon(
                       hasLike ? Icons.favorite : Icons.favorite_outline,
                       color: Colors.red,

@@ -66,7 +66,7 @@ class UserCard extends StatelessWidget {
               userTagLine,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              maxLines: 2,
+              maxLines: 1,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 5),

@@ -130,11 +130,20 @@ class ApiRoutes {
   static const login = "index.php/wp-json/api/login";
   static const register = "index.php/wp-json/api/register";
   static const showProfile = "index.php/wp-json/api/profile?uid=";
+  static const checkVerificationStatus =
+      "index.php/wp-json/api/identification/verification/status?user_id=";
+  static const verifyUser = "index.php/wp-json/api/identification/verification";
+  static const cancelVerification =
+      "index.php/wp-json/api/identification/verification/revoke?user_id=";
+  static const myServices = "index.php/wp-json/api/services/mine?user_id=";
   static const searchServices = "index.php/wp-json/api/services/search/?title=";
+  static const myProjects = "index.php/wp-json/api/projets/mine?user_id=";
   static const searchProjects = "index.php/wp-json/api/projets/search/?title=";
   static const fetchProjects = "index.php/wp-json/api/projets";
   static const toSaveProjects = "index.php/wp-json/api/projets/save";
+  static const toSaveServices = "index.php/wp-json/api/services/save";
   static const savedProjects = "index.php/wp-json/api/projets/saved?user_id=";
+  static const savedServices = "index.php/wp-json/api/services/saved?user_id=";
   static const fetchProjectById = "index.php/wp-json/api/projet/?id=";
   static const fetchServiceById = "index.php/wp-json/api/service/?id=";
   static const fetchSearchFilters =

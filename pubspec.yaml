@@ -27,6 +27,7 @@ dependencies:
   url_launcher: ^6.0.9
   card_swiper: ^1.0.2
   simple_html_css: ^3.0.1
+  file_picker: ^4.1.6 
 
   
 
