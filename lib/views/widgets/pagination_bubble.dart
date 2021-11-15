@@ -18,7 +18,7 @@ class _PaginationBubbleState extends State<PaginationBubble> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(4.5),
       margin: EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: widget.isActive ? kPrimaryColor : Colors.black26,

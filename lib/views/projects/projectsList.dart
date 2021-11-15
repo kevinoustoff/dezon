@@ -193,7 +193,7 @@ class _ProjectsListState extends State<ProjectsList> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 2.5),
                       child: Icon(
                         Icons.arrow_back_ios_outlined,
                         color: kPrimaryColor,
@@ -205,7 +205,7 @@ class _ProjectsListState extends State<ProjectsList> {
                         number: i + 1,
                       ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 2.5),
                       child: Icon(
                         Icons.arrow_forward_ios_outlined,
                         color: kPrimaryColor,

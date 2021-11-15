@@ -183,7 +183,7 @@ class _ServicesListState extends State<ServicesList> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
+                                  const EdgeInsets.symmetric(horizontal: 2.5),
                               child: Icon(
                                 Icons.arrow_back_ios_outlined,
                                 color: kPrimaryColor,
@@ -196,7 +196,7 @@ class _ServicesListState extends State<ServicesList> {
                               ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
+                                  const EdgeInsets.symmetric(horizontal: 2.5),
                               child: Icon(
                                 Icons.arrow_forward_ios_outlined,
                                 color: kPrimaryColor,

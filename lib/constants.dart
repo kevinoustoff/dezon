@@ -157,6 +157,8 @@ class ApiRoutes {
   static const sectionLocations = "index.php/wp-json/api/locations";
   static const sectionTypesPrestataires =
       "index.php/wp-json/api/types-prestataires";
+  static const createProjectGet = "index.php/wp-json/api/projets/create/data";
+  static const createProjectPost = "index.php/wp-json/api/projets/create";
 }
 
 class AppAssets {
