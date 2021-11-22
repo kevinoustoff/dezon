@@ -231,7 +231,7 @@ class _SearchPageState extends State<SearchPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ChoiceChip(
-                      label: Text('Services'),
+                      label: Text('Jobs'),
                       selected: chipValue.value == 0,
                       onSelected: (bool selected) =>
                           chipValue.value = selected ? 0 : null,

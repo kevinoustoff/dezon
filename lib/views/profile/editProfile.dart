@@ -234,10 +234,10 @@ class _EditProfileState extends State<EditProfile> {
                             i++)
                           snapD['langues-prestataires'][i]['name'],
                       ];
-                      final ValueNotifier<String> languageChoosed =
-                          ValueNotifier<String>(
-                              widget.infos['freelancer-language']
-                              /* snapD['langues-prestataires'][0]['name'] */);
+                      final ValueNotifier<
+                          String> languageChoosed = ValueNotifier<String>(widget
+                              .infos[
+                          'freelancer-language'] /* snapD['langues-prestataires'][0]['name'] */);
 
                       ///LOCATIONS
                       final List<String> locationsList = [
@@ -267,12 +267,11 @@ class _EditProfileState extends State<EditProfile> {
                       ];
                       final ValueNotifier<String> typeChoosed =
                           ValueNotifier<String>(snapD['types-prestataires']
-                                  [(snapD['types-prestataires'].indexWhere(
+                              [(snapD['types-prestataires'].indexWhere(
                         (elt) =>
                             elt['id'].toString() ==
                             widget.infos['freelance-type'],
-                      ))]['name']
-                              /* snapD['types-prestataires'][0]['name'] */);
+                      ))]['name'] /* snapD['types-prestataires'][0]['name'] */);
 
                       ///THE VIEW
                       return Form(
@@ -428,7 +427,7 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     SizedBox(height: 15),
                                     Text(
-                                      'Type de prestataire',
+                                      'Type de Jobeur',
                                       style: titleStyle,
                                     ),
                                     ValueListenableBuilder<String>(

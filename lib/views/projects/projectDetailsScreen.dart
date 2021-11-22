@@ -95,7 +95,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                   children: [
                                     Text(
                                       [
-                                        "Type de prestataire",
+                                        "Type de jobeur",
                                         "Durée",
                                         "Catégorie",
                                         "Langues",

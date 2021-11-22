@@ -159,6 +159,9 @@ class ApiRoutes {
       "index.php/wp-json/api/types-prestataires";
   static const createProjectGet = "index.php/wp-json/api/projets/create/data";
   static const createProjectPost = "index.php/wp-json/api/projets/create";
+  static const createServiceGet =
+      "index.php/wp-json/api/services/create/data?user_id=";
+  static const createServicePost = "index.php/wp-json/api/services/create";
 }
 
 class AppAssets {

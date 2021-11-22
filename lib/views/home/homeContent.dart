@@ -104,7 +104,7 @@ class _HomeContentState extends State<HomeContent> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Services à la une",
+                    "Jobs à la une",
                     style: titleStyle,
                   ),
                   SizedBox(height: 15),
@@ -164,7 +164,7 @@ class _HomeContentState extends State<HomeContent> {
                   ),
                   SizedBox(height: 15),
                   Text(
-                    "Top Prestataires",
+                    "Top Jobeurs",
                     style: titleStyle,
                   ),
                   FutureBuilder<List<Map>>(
@@ -239,7 +239,7 @@ class _HomeContentState extends State<HomeContent> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "1- Choisissez un prestataire",
+                          "1- Choisissez un Jobeur",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,

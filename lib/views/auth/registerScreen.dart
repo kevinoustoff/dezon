@@ -78,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   Text(
-                    "Créez un nouveau compte avec nous et commencez à utiliser la plateforme la plus fiable pour embaucher des perstataires et fournir des services.",
+                    "Créez un nouveau compte avec nous et commencez à utiliser la plateforme la plus fiable pour embaucher des jobeurs et fournir des jobs.",
                   ),
                   SizedBox(height: 25),
                   TextFormField(

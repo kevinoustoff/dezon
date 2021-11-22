@@ -144,7 +144,7 @@ class _ServiceCardState extends State<ServiceCard> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    "Service enregistré.",
+                                    "Job enregistré.",
                                     textAlign: TextAlign.center,
                                   ),
                                 ),

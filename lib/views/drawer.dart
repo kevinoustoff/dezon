@@ -1,6 +1,5 @@
 import 'package:dezon/views/profile/identityCheckScreen.dart';
 import 'package:dezon/views/pageInProgress.dart';
-import 'package:dezon/views/profile/reportsScreen.dart';
 import 'package:dezon/views/profile/settingsScreen.dart';
 import 'package:dezon/views/projects/post_project.dart';
 import 'package:dezon/views/services/post_service.dart';
@@ -217,7 +216,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               ),
                               tilePadding: EdgeInsets.all(0),
                               title: Text(
-                                'Mes Services',
+                                'Mes Jobs',
                                 style: TextStyle(
                                   //fontSize: 16.0,
                                   fontWeight: FontWeight.w500,
@@ -310,7 +309,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                         },
                                       ),
                                       buildMenuItem(
-                                        text: 'Services',
+                                        text: 'Jobs',
                                         icon: Icons.work_outline,
                                         onClicked: () async {
                                           final mUserId =
@@ -335,7 +334,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 ),
                               ],
                             ),
-                            buildMenuItem(
+                            /* buildMenuItem(
                               text: "Litiges",
                               icon: Icons.report_outlined,
                               onClicked: () {
@@ -346,7 +345,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                   ),
                                 );
                               },
-                            ),
+                            ), */
                             buildMenuItem(
                               text: "Vérification de l'identité",
                               icon: Icons.check_circle_outline,

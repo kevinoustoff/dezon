@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   Text(
-                    "Connectez-vous pour utiliser votre tableau de bord, c'est rapide et gratuit. Présentez vos compétences, faîtes des demandes de services et bien plus encore.",
+                    "Connectez-vous pour utiliser votre tableau de bord, c'est rapide et gratuit. Présentez vos compétences, faîtes des demandes de jobs et bien plus encore.",
                   ),
                   SizedBox(height: 25),
                   TextFormField(

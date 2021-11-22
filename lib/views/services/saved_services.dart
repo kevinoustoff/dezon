@@ -52,7 +52,7 @@ class _SavedServicesState extends State<SavedServices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Services Enregistrés"),
+        title: Text("Jobs Enregistrés"),
       ),
       body: FutureBuilder<List<Map>>(
         future: futureProjects,
@@ -91,7 +91,7 @@ class _SavedServicesState extends State<SavedServices> {
                     )
                   : Center(
                       child: Text(
-                        "Vous n'avez pas enregistré de services pour l'instant. Une fois enregistrés, ils s'afficheront ici.",
+                        "Vous n'avez pas enregistré de jobs pour l'instant. Une fois enregistrés, ils s'afficheront ici.",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),

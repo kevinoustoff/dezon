@@ -50,7 +50,7 @@ class _MyServicesState extends State<MyServices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mes services'),
+        title: Text('Mes jobs'),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
@@ -87,7 +87,7 @@ class _MyServicesState extends State<MyServices> {
                     )
                   : Center(
                       child: Text(
-                        "Vous n'avez pas de services pour l'instant. Une fois publiés, ils s'afficheront ici.",
+                        "Vous n'avez pas de jobs pour l'instant. Une fois publiés, ils s'afficheront ici.",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),

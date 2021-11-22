@@ -10,7 +10,7 @@ import 'homeContent.dart';
 
 const List<String> menuLabels = [
   'Accueil',
-  'Services',
+  'Jobs',
   'Projets',
   'Messagerie',
 ];

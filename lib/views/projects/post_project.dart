@@ -252,7 +252,7 @@ class _PostProjectState extends State<PostProject> {
                                 hint: const Padding(
                                   padding: EdgeInsets.only(left: 10.0),
                                   child: Text(
-                                    "Type de prestataire souhaité",
+                                    "Type de jobeur souhaité",
                                   ),
                                 ),
                                 icon: const Icon(Icons.keyboard_arrow_down),
@@ -555,8 +555,14 @@ class _PostProjectState extends State<PostProject> {
                                 : Wrap(
                                     spacing: 5,
                                     runSpacing: 5,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
                                     children: [
-                                      Text(docmt.path),
+                                      Text(
+                                        docmt.path.substring(
+                                          docmt.path.lastIndexOf('/') + 1,
+                                        ),
+                                      ),
                                       TextButton.icon(
                                         style: ButtonStyle(
                                             foregroundColor:
